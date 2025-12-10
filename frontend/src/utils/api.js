@@ -2,9 +2,8 @@ import axios from "axios";
 
 // Create axios instance with base configuration
 const api = axios.create({
-  baseURL: import.meta.env.PROD
-    ? import.meta.env.VITE_API_URL ||
-      "https://alumni-hub-backend-ac5n.onrender.com/api"
+  baseURL: import.meta.env.MODE === 'production'
+    ? import.meta.env.VITE_API_URL || "https://alumni-hub-backend-ac5n.onrender.com/api"
     : "http://localhost:5000/api",
   headers: {
     "Content-Type": "application/json",
