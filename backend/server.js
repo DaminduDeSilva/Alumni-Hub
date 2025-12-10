@@ -62,6 +62,12 @@ app.use("/api/batchmates", batchmateRoutes);
 app.use("/api/user", profileRoutes);
 app.use("/api/field-admins", fieldAdminRoutes);
 
+// Database inspection routes (for debugging)
+const { inspectDatabase, checkAdmin, createAdmin } = require("./controllers/database");
+app.get("/api/debug/database", inspectDatabase);
+app.get("/api/debug/admin", checkAdmin);
+app.post("/api/debug/create-admin", createAdmin);
+
 // Health check endpoint
 app.get("/api/health", (req, res) => {
   res.json({
