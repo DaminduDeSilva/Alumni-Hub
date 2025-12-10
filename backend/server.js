@@ -67,6 +67,7 @@ const { inspectDatabase, checkAdmin, createAdmin } = require("./controllers/data
 app.get("/api/debug/database", inspectDatabase);
 app.get("/api/debug/admin", checkAdmin);
 app.post("/api/debug/create-admin", createAdmin);
+app.get("/api/debug/setup-admin", createAdmin); // GET version for easy access
 
 // Health check endpoint
 app.get("/api/health", (req, res) => {
