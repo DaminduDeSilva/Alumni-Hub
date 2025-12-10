@@ -5,7 +5,7 @@ const bcrypt = require("bcryptjs");
 const inspectDatabase = async (req, res) => {
   try {
     const client = await pool.connect();
-    
+
     // Get all tables
     const tablesResult = await client.query(`
       SELECT table_name 
@@ -13,41 +13,46 @@ const inspectDatabase = async (req, res) => {
       WHERE table_schema = 'public'
       ORDER BY table_name;
     `);
-    
+
     const tables = {};
-    
+
     for (const table of tablesResult.rows) {
       const tableName = table.table_name;
-      
+
       // Get table structure
-      const columnsResult = await client.query(`
+      const columnsResult = await client.query(
+        `
         SELECT column_name, data_type, is_nullable, column_default
         FROM information_schema.columns
         WHERE table_name = $1
         ORDER BY ordinal_position;
-      `, [tableName]);
-      
+      `,
+        [tableName]
+      );
+
       // Get row count
-      const countResult = await client.query(`SELECT COUNT(*) as count FROM ${tableName};`);
-      
+      const countResult = await client.query(
+        `SELECT COUNT(*) as count FROM ${tableName};`
+      );
+
       tables[tableName] = {
         columns: columnsResult.rows,
-        rowCount: parseInt(countResult.rows[0].count)
+        rowCount: parseInt(countResult.rows[0].count),
       };
     }
-    
+
     client.release();
-    
+
     res.json({
       success: true,
       database: "alumni_hub",
-      tables: tables
+      tables: tables,
     });
   } catch (error) {
     console.error("Database inspection error:", error);
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -63,15 +68,15 @@ const checkAdmin = async (req, res) => {
       ORDER BY created_at;
     `);
     client.release();
-    
+
     res.json({
       success: true,
-      adminUsers: result.rows
+      adminUsers: result.rows,
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -85,7 +90,8 @@ const createAdmin = async (req, res) => {
     if (!email || !password) {
       return res.status(400).json({
         success: false,
-        error: "ADMIN_EMAIL and ADMIN_PASSWORD must be set in environment variables"
+        error:
+          "ADMIN_EMAIL and ADMIN_PASSWORD must be set in environment variables",
       });
     }
 
@@ -102,7 +108,7 @@ const createAdmin = async (req, res) => {
       return res.json({
         success: true,
         message: "Admin user already exists",
-        admin: checkResult.rows[0]
+        admin: checkResult.rows[0],
       });
     }
 
@@ -132,13 +138,13 @@ const createAdmin = async (req, res) => {
     res.json({
       success: true,
       message: "Admin user created successfully",
-      admin: result.rows[0]
+      admin: result.rows[0],
     });
   } catch (error) {
     console.error("Admin creation error:", error);
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 };
