@@ -7,7 +7,8 @@ require("dotenv").config();
 const { testConnection } = require("./config/database");
 // Import both storage systems
 const { initializeMinIO } = require("./config/minio");
-const cloudinaryConfig = process.env.NODE_ENV === 'production' ? require("./config/cloudinary") : null;
+const cloudinaryConfig =
+  process.env.NODE_ENV === "production" ? require("./config/cloudinary") : null;
 
 const authRoutes = require("./routes/auth");
 const submissionRoutes = require("./routes/submissions");
@@ -22,12 +23,13 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 const corsOptions = {
-  origin: process.env.NODE_ENV === 'production' 
-    ? [process.env.FRONTEND_URL, 'https://your-frontend-url.vercel.app']
-    : ['http://localhost:5173', 'http://localhost:5174'],
+  origin:
+    process.env.NODE_ENV === "production"
+      ? [process.env.FRONTEND_URL]
+      : ["http://localhost:5173", "http://localhost:5174"],
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
 };
 
 app.use(cors(corsOptions));
@@ -183,8 +185,8 @@ const startServer = async () => {
 
   // Initialize storage (MinIO for local, Cloudinary for production)
   let storageInitialized = true;
-  
-  if (process.env.NODE_ENV === 'production') {
+
+  if (process.env.NODE_ENV === "production") {
     console.log("☁️ Using Cloudinary for production storage...");
     // Cloudinary doesn't need initialization, just verify config
     if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY) {
@@ -202,15 +204,37 @@ const startServer = async () => {
     app.listen(PORT, () => {
       console.log("=".repeat(60));
       console.log(`✅ ALUMNI HUB BACKEND READY`);
-      console.log(`📍 Backend API: ${process.env.NODE_ENV === 'production' ? 'Production' : `http://localhost:${PORT}`}`);
-      console.log(`📊 Health check: ${process.env.NODE_ENV === 'production' ? '/api/health' : `http://localhost:${PORT}/api/health`}`);
-      console.log(`🗄️ Database: ${process.env.NODE_ENV === 'production' ? 'PostgreSQL (Render)' : `${process.env.DB_HOST}:${process.env.DB_PORT}`}`);
-      console.log(`💾 Storage: ${process.env.NODE_ENV === 'production' ? 'Cloudinary' : 'MinIO'}`);
+      console.log(
+        `📍 Backend API: ${
+          process.env.NODE_ENV === "production"
+            ? "Production"
+            : `http://localhost:${PORT}`
+        }`
+      );
+      console.log(
+        `📊 Health check: ${
+          process.env.NODE_ENV === "production"
+            ? "/api/health"
+            : `http://localhost:${PORT}/api/health`
+        }`
+      );
+      console.log(
+        `🗄️ Database: ${
+          process.env.NODE_ENV === "production"
+            ? "PostgreSQL (Render)"
+            : `${process.env.DB_HOST}:${process.env.DB_PORT}`
+        }`
+      );
+      console.log(
+        `💾 Storage: ${
+          process.env.NODE_ENV === "production" ? "Cloudinary" : "MinIO"
+        }`
+      );
       console.log("=".repeat(60));
     });
   } else {
     console.error("❌ Infrastructure setup failed");
-    if (process.env.NODE_ENV !== 'production') {
+    if (process.env.NODE_ENV !== "production") {
       console.log("💡 Troubleshooting:");
       console.log("1. Run: docker-compose up -d");
       console.log("2. Check: docker ps");

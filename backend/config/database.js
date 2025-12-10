@@ -7,7 +7,10 @@ const pool = new Pool(
     ? {
         // Production: Use DATABASE_URL (Render provides this)
         connectionString: process.env.DATABASE_URL,
-        ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+        ssl:
+          process.env.NODE_ENV === "production"
+            ? { rejectUnauthorized: false }
+            : false,
       }
     : {
         // Local development: Use individual DB_* variables

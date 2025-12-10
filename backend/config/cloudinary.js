@@ -1,4 +1,4 @@
-const cloudinary = require('cloudinary').v2;
+const cloudinary = require("cloudinary").v2;
 
 // Configure Cloudinary
 cloudinary.config({
@@ -10,12 +10,12 @@ cloudinary.config({
 const uploadToCloudinary = async (file) => {
   try {
     const result = await cloudinary.uploader.upload(file.path, {
-      folder: 'alumni-hub',
-      resource_type: 'auto',
+      folder: "alumni-hub",
+      resource_type: "auto",
       transformation: [
-        { width: 500, height: 500, crop: 'fill' },
-        { quality: 'auto' }
-      ]
+        { width: 500, height: 500, crop: "fill" },
+        { quality: "auto" },
+      ],
     });
 
     return {
@@ -24,10 +24,10 @@ const uploadToCloudinary = async (file) => {
       public_id: result.public_id,
     };
   } catch (error) {
-    console.error('Cloudinary upload error:', error);
-    return { 
-      success: false, 
-      error: error.message 
+    console.error("Cloudinary upload error:", error);
+    return {
+      success: false,
+      error: error.message,
     };
   }
 };
@@ -37,7 +37,7 @@ const deleteFromCloudinary = async (publicId) => {
     const result = await cloudinary.uploader.destroy(publicId);
     return { success: true, result };
   } catch (error) {
-    console.error('Cloudinary delete error:', error);
+    console.error("Cloudinary delete error:", error);
     return { success: false, error: error.message };
   }
 };
@@ -45,5 +45,5 @@ const deleteFromCloudinary = async (publicId) => {
 module.exports = {
   uploadToCloudinary,
   deleteFromCloudinary,
-  cloudinary
+  cloudinary,
 };
