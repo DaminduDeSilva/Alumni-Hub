@@ -53,10 +53,12 @@ export const AuthProvider = ({ children }) => {
   };
 
   const loginWithGoogle = () => {
-    const baseURL = import.meta.env.MODE === 'production'
-      ? import.meta.env.VITE_API_URL || "https://alumni-hub-backend-ac5n.onrender.com/api"
-      : "http://localhost:5000/api";
-    
+    const baseURL =
+      import.meta.env.MODE === "production"
+        ? import.meta.env.VITE_API_URL ||
+          "https://alumni-hub-backend-ac5n.onrender.com/api"
+        : "http://localhost:5000/api";
+
     window.location.href = `${baseURL}/auth/google`;
   };
 

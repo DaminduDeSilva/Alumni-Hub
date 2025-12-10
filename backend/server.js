@@ -68,10 +68,12 @@ const {
   checkAdmin,
   createAdmin,
 } = require("./controllers/database");
+const { debugEnv } = require("./controllers/debug");
 app.get("/api/debug/database", inspectDatabase);
 app.get("/api/debug/admin", checkAdmin);
 app.post("/api/debug/create-admin", createAdmin);
 app.get("/api/debug/setup-admin", createAdmin); // GET version for easy access
+app.get("/api/debug/env", debugEnv); // Environment debug
 
 // Health check endpoint
 app.get("/api/health", (req, res) => {
