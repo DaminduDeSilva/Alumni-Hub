@@ -1,0 +1,40 @@
+# Backend specific ignores
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Database files
+*.sqlite
+*.sqlite3
+*.db
+
+# Logs
+logs/
+*.log
+
+# Uploads
+uploads/
+temp/
+
+# Sessions
+sessions/
+
+# Cache
+.cache/
+
+# MinIO data
+minio-data/
+data/
+
+# PM2 files
+ecosystem.config.js
+.pm2/
+
+# SSL certificates
+*.pem
+*.crt
+*.key
