@@ -5,7 +5,10 @@ const session = require("express-session");
 require("dotenv").config();
 
 const { testConnection } = require("./config/database");
+// Import both storage systems
 const { initializeMinIO } = require("./config/minio");
+const cloudinaryConfig = process.env.NODE_ENV === 'production' ? require("./config/cloudinary") : null;
+
 const authRoutes = require("./routes/auth");
 const submissionRoutes = require("./routes/submissions");
 const adminRoutes = require("./routes/admin");
@@ -178,30 +181,41 @@ const startServer = async () => {
   console.log("🔌 Testing PostgreSQL connection...");
   const dbConnected = await testConnection();
 
-  // Initialize MinIO
-  console.log("💾 Initializing MinIO storage...");
-  const minioInitialized = await initializeMinIO();
+  // Initialize storage (MinIO for local, Cloudinary for production)
+  let storageInitialized = true;
+  
+  if (process.env.NODE_ENV === 'production') {
+    console.log("☁️ Using Cloudinary for production storage...");
+    // Cloudinary doesn't need initialization, just verify config
+    if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY) {
+      console.error("❌ Cloudinary credentials missing");
+      storageInitialized = false;
+    } else {
+      console.log("✅ Cloudinary configured successfully");
+    }
+  } else {
+    console.log("💾 Initializing MinIO storage...");
+    storageInitialized = await initializeMinIO();
+  }
 
-  if (dbConnected && minioInitialized) {
+  if (dbConnected && storageInitialized) {
     app.listen(PORT, () => {
       console.log("=".repeat(60));
-      console.log(`✅ INFRASTRUCTURE READY`);
-      console.log(`📍 Backend API: http://localhost:${PORT}`);
-      console.log(`📊 Health check: http://localhost:${PORT}/api/health`);
-      console.log(
-        `🗄️  PostgreSQL: ${process.env.DB_HOST}:${process.env.DB_PORT}`
-      );
-      console.log(`💾 MinIO Console: http://localhost:9001`);
-      console.log("=".repeat(60));
-      console.log("📋 NEXT STEP: Phase 2 - Authentication");
+      console.log(`✅ ALUMNI HUB BACKEND READY`);
+      console.log(`📍 Backend API: ${process.env.NODE_ENV === 'production' ? 'Production' : `http://localhost:${PORT}`}`);
+      console.log(`📊 Health check: ${process.env.NODE_ENV === 'production' ? '/api/health' : `http://localhost:${PORT}/api/health`}`);
+      console.log(`🗄️ Database: ${process.env.NODE_ENV === 'production' ? 'PostgreSQL (Render)' : `${process.env.DB_HOST}:${process.env.DB_PORT}`}`);
+      console.log(`💾 Storage: ${process.env.NODE_ENV === 'production' ? 'Cloudinary' : 'MinIO'}`);
       console.log("=".repeat(60));
     });
   } else {
     console.error("❌ Infrastructure setup failed");
-    console.log("💡 Troubleshooting:");
-    console.log("1. Run: docker-compose up -d");
-    console.log("2. Check: docker ps");
-    console.log("3. Wait 30 seconds for containers to start");
+    if (process.env.NODE_ENV !== 'production') {
+      console.log("💡 Troubleshooting:");
+      console.log("1. Run: docker-compose up -d");
+      console.log("2. Check: docker ps");
+      console.log("3. Wait 30 seconds for containers to start");
+    }
     process.exit(1);
   }
 };
