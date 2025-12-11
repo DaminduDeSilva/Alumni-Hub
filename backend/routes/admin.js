@@ -189,6 +189,16 @@ router.put(
         [userRole, assignedField, req.user.id, submission.user_id]
       );
 
+      // If user is being assigned as FIELD_ADMIN, also create field_admins entry
+      if (userRole === "FIELD_ADMIN" && assignedField) {
+        await pool.query(
+          `INSERT INTO field_admins 
+           (field, user_id, assigned_by, assigned_at, is_active)
+           VALUES ($1, $2, $3, CURRENT_TIMESTAMP, true)`,
+          [assignedField, submission.user_id, req.user.id]
+        );
+      }
+
       // Add to batchmates
       await pool.query(
         `INSERT INTO batchmates 

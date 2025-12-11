@@ -87,10 +87,10 @@ app.get("/", (req, res) => {
       auth: "/api/auth",
       submissions: "/api/submissions",
       admin: "/api/admin",
-      batchmates: "/api/batchmates", 
+      batchmates: "/api/batchmates",
       profile: "/api/user",
-      fieldAdmins: "/api/field-admins"
-    }
+      fieldAdmins: "/api/field-admins",
+    },
   });
 });
 
@@ -260,20 +260,26 @@ const startServer = async () => {
       );
       console.log(
         `💾 Storage: ${
-          process.env.NODE_ENV === "production" ? 
-            (storageInitialized ? "Cloudinary (Ready)" : "Cloudinary (Warning: Check env vars)") 
-            : (storageInitialized ? "MinIO (Ready)" : "MinIO (Warning: Not available)")
+          process.env.NODE_ENV === "production"
+            ? storageInitialized
+              ? "Cloudinary (Ready)"
+              : "Cloudinary (Warning: Check env vars)"
+            : storageInitialized
+            ? "MinIO (Ready)"
+            : "MinIO (Warning: Not available)"
         }`
       );
-      
+
       if (!storageInitialized) {
         console.log("⚠️ Warning: File storage may not work properly");
       }
-      
+
       console.log("=".repeat(60));
     });
   } else {
-    console.error("❌ Infrastructure setup failed - Database connection required");
+    console.error(
+      "❌ Infrastructure setup failed - Database connection required"
+    );
     if (process.env.NODE_ENV !== "production") {
       console.log("💡 Troubleshooting:");
       console.log("1. Run: docker-compose up -d");
