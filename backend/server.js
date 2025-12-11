@@ -79,14 +79,14 @@ app.get("/api/debug/env", debugEnv); // Environment debug
 app.get("/api/health", (req, res) => {
   res.json({
     status: "OK",
-    service: "Alumni Hub Infrastructure",
-    phase: "1 - Database & Storage Setup",
+    service: "Alumni Hub Backend",
+    version: "2.0.0", // Updated to force redeploy
     timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV,
     endpoints: {
       health: "/api/health",
-      database: "/api/test/db",
-      storage: "/api/test/minio",
-      containers: "/api/docker/status",
+      database: "/api/debug/database",
+      admin: "/api/debug/admin",
     },
   });
 });
