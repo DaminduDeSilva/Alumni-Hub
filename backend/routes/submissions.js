@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { pool } = require("../config/database");
 const { authenticateToken } = require("../middleware/auth");
-const { upload, uploadToMinIO } = require("../utils/fileUpload");
+const { upload, uploadFile } = require("../utils/fileUpload");
 
 // List of countries for dropdown
 const COUNTRIES = [
@@ -111,7 +111,7 @@ router.post(
       let currentPhotoUrl = null;
 
       if (req.files["universityPhoto"]) {
-        const uploadResult = await uploadToMinIO(
+        const uploadResult = await uploadFile(
           req.files["universityPhoto"][0],
           "university-photos"
         );
@@ -125,7 +125,7 @@ router.post(
       }
 
       if (req.files["currentPhoto"]) {
-        const uploadResult = await uploadToMinIO(
+        const uploadResult = await uploadFile(
           req.files["currentPhoto"][0],
           "current-photos"
         );

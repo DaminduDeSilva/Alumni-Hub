@@ -1,7 +1,9 @@
 const multer = require("multer");
-const { minioClient } = require("../config/minio");
 const path = require("path");
 require("dotenv").config();
+
+// Import storage services
+const { minioClient } = require("../config/minio");
 
 // Configure multer for memory storage
 const storage = multer.memoryStorage();
@@ -24,6 +26,59 @@ const upload = multer({
     }
   },
 });
+
+// Production-ready upload function that chooses storage based on environment
+const uploadFile = async (file, folder = "photos") => {
+  if (process.env.NODE_ENV === 'production') {
+    // Use Cloudinary in production
+    return await uploadToCloudinaryFile(file, folder);
+  } else {
+    // Use MinIO in development
+    return await uploadToMinIO(file, folder);
+  }
+};
+
+// Cloudinary upload function
+const uploadToCloudinaryFile = async (file, folder = "photos") => {
+  try {
+    const cloudinary = require('cloudinary').v2;
+    
+    return new Promise((resolve, reject) => {
+      cloudinary.uploader.upload_stream(
+        {
+          folder: `alumni-hub/${folder}`,
+          resource_type: 'auto',
+          transformation: [
+            { width: 500, height: 500, crop: 'fill' },
+            { quality: 'auto' }
+          ]
+        },
+        (error, result) => {
+          if (error) {
+            console.error('Cloudinary upload error:', error);
+            resolve({
+              success: false,
+              error: error.message
+            });
+          } else {
+            resolve({
+              success: true,
+              url: result.secure_url,
+              public_id: result.public_id,
+              fileName: result.public_id
+            });
+          }
+        }
+      ).end(file.buffer);
+    });
+  } catch (error) {
+    console.error("Cloudinary upload error:", error);
+    return {
+      success: false,
+      error: error.message,
+    };
+  }
+};
 
 // Upload file to MinIO
 const uploadToMinIO = async (file, folder = "photos") => {
@@ -68,6 +123,8 @@ const deleteFromMinIO = async (fileName) => {
 
 module.exports = {
   upload,
+  uploadFile, // New unified upload function
   uploadToMinIO,
+  uploadToCloudinaryFile,
   deleteFromMinIO,
 };
