@@ -80,7 +80,7 @@ app.get("/", (req, res) => {
   res.json({
     success: true,
     message: "Alumni Hub Backend API",
-    version: "2.0.1",
+    version: "2.0.2",
     status: "running",
     endpoints: {
       health: "/api/health",
@@ -99,7 +99,7 @@ app.get("/api/health", (req, res) => {
   res.json({
     status: "OK",
     service: "Alumni Hub Backend",
-    version: "2.0.1", // Updated to force redeploy with root route
+    version: "2.0.2", // Updated to force redeploy with server resilience fix
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV,
     endpoints: {
@@ -232,7 +232,8 @@ const startServer = async () => {
     storageInitialized = await initializeMinIO();
   }
 
-  if (dbConnected && storageInitialized) {
+  if (dbConnected) {
+    // Start server even if storage has issues - we can warn about it
     app.listen(PORT, () => {
       console.log("=".repeat(60));
       console.log(`✅ ALUMNI HUB BACKEND READY`);
@@ -259,13 +260,20 @@ const startServer = async () => {
       );
       console.log(
         `💾 Storage: ${
-          process.env.NODE_ENV === "production" ? "Cloudinary" : "MinIO"
+          process.env.NODE_ENV === "production" ? 
+            (storageInitialized ? "Cloudinary (Ready)" : "Cloudinary (Warning: Check env vars)") 
+            : (storageInitialized ? "MinIO (Ready)" : "MinIO (Warning: Not available)")
         }`
       );
+      
+      if (!storageInitialized) {
+        console.log("⚠️ Warning: File storage may not work properly");
+      }
+      
       console.log("=".repeat(60));
     });
   } else {
-    console.error("❌ Infrastructure setup failed");
+    console.error("❌ Infrastructure setup failed - Database connection required");
     if (process.env.NODE_ENV !== "production") {
       console.log("💡 Troubleshooting:");
       console.log("1. Run: docker-compose up -d");
