@@ -236,7 +236,7 @@ router.put(
     } catch (error) {
       await pool.query("ROLLBACK");
       console.error("Approve submission error:", error);
-      res.status(500).json({ error: "Failed to approve submission" });
+      res.status(500).json({ error: "Failed to approve submission. Field admin already exists for this field." });
     }
   }
 );
