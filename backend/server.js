@@ -75,12 +75,31 @@ app.post("/api/debug/create-admin", createAdmin);
 app.get("/api/debug/setup-admin", createAdmin); // GET version for easy access
 app.get("/api/debug/env", debugEnv); // Environment debug
 
+// Root endpoint
+app.get("/", (req, res) => {
+  res.json({
+    success: true,
+    message: "Alumni Hub Backend API",
+    version: "2.0.1",
+    status: "running",
+    endpoints: {
+      health: "/api/health",
+      auth: "/api/auth",
+      submissions: "/api/submissions",
+      admin: "/api/admin",
+      batchmates: "/api/batchmates", 
+      profile: "/api/user",
+      fieldAdmins: "/api/field-admins"
+    }
+  });
+});
+
 // Health check endpoint
 app.get("/api/health", (req, res) => {
   res.json({
     status: "OK",
     service: "Alumni Hub Backend",
-    version: "2.0.0", // Updated to force redeploy
+    version: "2.0.1", // Updated to force redeploy with root route
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV,
     endpoints: {
