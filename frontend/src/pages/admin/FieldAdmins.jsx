@@ -376,7 +376,7 @@ const FieldAdmins = () => {
                         {currentAdmin ? (
                           <div>
                             <div className="font-medium text-gray-900">
-                              {currentAdmin.name}
+                              {currentAdmin.full_name}
                             </div>
                             <div className="text-sm text-gray-500">
                               Field Administrator
