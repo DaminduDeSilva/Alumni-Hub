@@ -652,13 +652,14 @@ const Home = () => {
 
           {/* Admin link at bottom */}
           <div className="px-8 pb-6 text-center border-t border-white/10">
-            <p className="text-white/50 text-sm mt-4">
+            <p className="text-white/70 text-base mt-4">
               Committee member?{" "}
               <Link
                 to="/committee-login"
-                className="text-blue-300 hover:text-blue-200 font-medium hover:underline transition-colors"
+                className="text-blue-200 hover:text-blue-100 font-semibold hover:underline transition-colors cursor-pointer relative z-50 bg-blue-600/20 px-3 py-1 rounded-lg"
+                onClick={() => console.log("Admin login link clicked")}
               >
-                Admin Login
+                Admin Login →
               </Link>
             </p>
           </div>
