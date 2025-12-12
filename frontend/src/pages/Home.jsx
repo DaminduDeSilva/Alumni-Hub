@@ -522,45 +522,21 @@ const Home = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 flex flex-col items-center justify-center p-4 relative overflow-hidden">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 left-20 w-72 h-72 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-20 w-80 h-80 bg-gradient-to-br from-purple-500/15 to-pink-500/15 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-indigo-500/10 to-blue-500/10 rounded-full blur-3xl animate-pulse delay-500"></div>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 flex flex-col items-center justify-center p-4">
+      <div className="max-w-md w-full relative">
+        {/* Background decoration */}
+        <div className="absolute -top-20 -left-20 w-40 h-40 bg-gradient-to-br from-blue-500/20 to-indigo-500/20 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-full blur-3xl"></div>
 
-      {/* Floating particles */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(8)].map((_, i) => (
-          <div
-            key={i}
-            className={`absolute w-1 h-1 bg-white/30 rounded-full animate-float`}
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 3}s`,
-              animationDuration: `${3 + Math.random() * 2}s`,
-            }}
-          />
-        ))}
-      </div>
+        <div className="relative bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 overflow-hidden">
+          {/* Header decoration */}
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500"></div>
 
-      <div className="max-w-lg w-full relative z-10">
-        <div className="bg-white/10 backdrop-blur-2xl rounded-3xl shadow-2xl border border-white/20 overflow-hidden">
-          {/* Shimmer effect */}
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/50 to-transparent"></div>
-
-          {/* Inner glow */}
-          <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-3xl"></div>
-
-          <div className="p-8 relative z-10">
-            {/* Header */}
-            <div className="text-center mb-10">
-              <div className="w-20 h-20 bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 rounded-3xl mx-auto mb-6 flex items-center justify-center shadow-lg relative overflow-hidden group">
-                <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"></div>
+          <div className="p-8">
+            <div className="text-center mb-8">
+              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl mx-auto mb-4 flex items-center justify-center shadow-lg">
                 <svg
-                  className="w-10 h-10 text-white relative z-10 group-hover:scale-110 transition-transform"
+                  className="w-8 h-8 text-white"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -573,21 +549,20 @@ const Home = () => {
                   />
                 </svg>
               </div>
-              <h1 className="text-4xl font-bold text-white mb-4 tracking-tight">
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 bg-clip-text text-transparent mb-2">
                 Alumni Hub
               </h1>
-              <p className="text-blue-100/80 text-lg font-medium mb-8">
+              <p className="text-gray-600 text-lg">
                 Connect with your batchmates and alumni community
               </p>
             </div>
 
-            {/* Main Google Login Section */}
             <div className="space-y-6">
               <div className="text-center">
-                <h2 className="text-2xl font-semibold text-white mb-2">
+                <h2 className="text-2xl font-semibold text-gray-900 mb-2">
                   Welcome Back
                 </h2>
-                <p className="text-white/70 text-base mb-8">
+                <p className="text-gray-600 text-base mb-6">
                   Sign in with your Google account to access the alumni network
                 </p>
               </div>
@@ -595,9 +570,9 @@ const Home = () => {
               {/* Google Login Button */}
               <button
                 onClick={loginWithGoogle}
-                className="w-full flex items-center justify-center gap-4 px-6 py-4 bg-white text-gray-700 font-semibold rounded-2xl hover:bg-gray-50 hover:shadow-2xl transition-all duration-300 transform hover:scale-105 shadow-xl relative overflow-hidden group"
+                className="w-full flex items-center justify-center gap-4 px-6 py-4 bg-white text-gray-700 font-semibold rounded-2xl border border-gray-200 hover:bg-gray-50 hover:shadow-xl transition-all duration-300 transform hover:scale-105 shadow-lg relative overflow-hidden group"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-blue-50/50 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-50/0 via-blue-50/70 to-blue-50/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
                 <svg className="w-6 h-6 relative z-10" viewBox="0 0 24 24">
                   <path
                     fill="#4285F4"
@@ -616,77 +591,49 @@ const Home = () => {
                     d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                   />
                 </svg>
-                <span className="text-lg relative z-10">
-                  Continue with Google
-                </span>
+                <span className="text-lg relative z-10">Continue with Google</span>
               </button>
 
               {/* Info text */}
-              <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 text-center">
-                <p className="text-white/70 text-sm leading-relaxed">
-                  🎓 All alumni members use Google authentication for secure
-                  access to the network
+              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 rounded-xl p-4 text-center">
+                <p className="text-gray-700 text-sm leading-relaxed">
+                  🎓 All alumni members use Google authentication for secure access to the network
                 </p>
               </div>
 
               {/* Benefits section */}
-              <div className="grid grid-cols-2 gap-4 mt-8">
+              <div className="grid grid-cols-2 gap-4 mt-6">
                 <div className="text-center p-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-xl mx-auto mb-3 flex items-center justify-center">
-                    <svg
-                      className="w-6 h-6 text-blue-300"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                      />
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-100 rounded-xl mx-auto mb-3 flex items-center justify-center">
+                    <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                     </svg>
                   </div>
-                  <h3 className="text-white text-sm font-semibold mb-1">
-                    Connect
-                  </h3>
-                  <p className="text-white/60 text-xs">Find batchmates</p>
+                  <h3 className="text-gray-900 text-sm font-semibold mb-1">Connect</h3>
+                  <p className="text-gray-600 text-xs">Find batchmates</p>
                 </div>
                 <div className="text-center p-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl mx-auto mb-3 flex items-center justify-center">
-                    <svg
-                      className="w-6 h-6 text-purple-300"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                      />
+                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-purple-100 rounded-xl mx-auto mb-3 flex items-center justify-center">
+                    <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
                   </div>
-                  <h3 className="text-white text-sm font-semibold mb-1">
-                    Share
-                  </h3>
-                  <p className="text-white/60 text-xs">Update profiles</p>
+                  <h3 className="text-gray-900 text-sm font-semibold mb-1">Share</h3>
+                  <p className="text-gray-600 text-xs">Update profiles</p>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Admin link at bottom */}
-          <div className="px-8 pb-6 text-center border-t border-white/10">
-            <p className="text-white/70 text-base mt-4">
+          <div className="px-8 pb-6 text-center border-t border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100/50">
+            <p className="text-gray-600 text-sm mt-4">
               Committee member?{" "}
               <Link
                 to="/committee-login"
-                className="text-blue-200 hover:text-blue-100 font-semibold hover:underline transition-colors cursor-pointer relative z-50 bg-blue-600/20 px-3 py-1 rounded-lg"
-                onClick={() => console.log("Admin login link clicked")}
+                className="text-blue-600 hover:text-blue-700 font-semibold hover:underline transition-colors"
               >
-                Admin Login →
+                Admin Login
               </Link>
             </p>
           </div>
@@ -694,7 +641,7 @@ const Home = () => {
 
         {/* Help text */}
         <div className="text-center mt-6">
-          <p className="text-white/40 text-sm">
+          <p className="text-gray-500 text-sm">
             Need help? Contact the alumni committee
           </p>
         </div>
