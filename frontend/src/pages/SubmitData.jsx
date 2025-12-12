@@ -193,16 +193,16 @@ const SubmitData = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen py-8 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: 'var(--bg-primary)' }}>
       <div className="max-w-4xl mx-auto">
         {/* Enhanced Header */}
-        <div className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20 p-8 mb-8 relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500"></div>
-          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/10 to-indigo-500/10 rounded-bl-full"></div>
+        <div className="blue-card p-8 mb-8 relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-blue-400 to-blue-600"></div>
+          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/10 to-blue-600/10 rounded-bl-full"></div>
 
           <div className="relative z-10 text-center">
             <div className="flex items-center justify-center mb-4">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg mr-4">
+              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg mr-4">
                 <svg
                   className="w-8 h-8 text-white"
                   fill="none"
@@ -218,10 +218,10 @@ const SubmitData = () => {
                 </svg>
               </div>
               <div className="text-left">
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 via-blue-800 to-indigo-800 bg-clip-text text-transparent">
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-200 to-blue-400 bg-clip-text text-transparent">
                   Join the Alumni Directory
                 </h1>
-                <p className="text-gray-600 text-lg mt-1">
+                <p className="blue-text-secondary text-lg mt-1">
                   Connect with your fellow alumni around the world
                 </p>
               </div>
@@ -231,22 +231,22 @@ const SubmitData = () => {
 
         {/* Enhanced Progress Indicator */}
         <div className="mb-8">
-          <div className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20 p-6 relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-500 via-blue-500 to-purple-500"></div>
+          <div className="blue-card p-6 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-blue-400 to-blue-600"></div>
 
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
                   <span className="text-lg font-bold text-white">1</span>
                 </div>
               </div>
               <div className="ml-6 flex-1">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-lg font-semibold text-gray-900">
+                    <p className="text-lg font-semibold blue-text-primary">
                       Submit Your Information
                     </p>
-                    <p className="text-sm text-gray-600 mt-1">
+                    <p className="text-sm blue-text-secondary mt-1">
                       Fill out your details to join our alumni network
                     </p>
                   </div>
@@ -265,14 +265,14 @@ const SubmitData = () => {
         {/* Enhanced Form */}
         <form
           onSubmit={handleSubmit}
-          className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20 overflow-hidden"
+          className="blue-card overflow-hidden"
         >
           {/* Form Header */}
-          <div className="relative px-8 py-8 bg-gradient-to-r from-blue-50/50 via-indigo-50/50 to-purple-50/50 border-b border-white/20">
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500"></div>
+          <div className="relative px-8 py-8 border-b" style={{ borderColor: 'var(--border-color)', backgroundColor: 'var(--bg-secondary)' }}>
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-blue-400 to-blue-600"></div>
 
             <div className="flex items-center">
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg mr-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg mr-4">
                 <svg
                   className="w-6 h-6 text-white"
                   fill="none"
@@ -288,10 +288,10 @@ const SubmitData = () => {
                 </svg>
               </div>
               <div>
-                <h2 className="text-xl font-bold bg-gradient-to-r from-gray-900 to-blue-800 bg-clip-text text-transparent">
+                <h2 className="text-xl font-bold bg-gradient-to-r from-blue-200 to-blue-400 bg-clip-text text-transparent">
                   Personal Information
                 </h2>
-                <p className="text-gray-600 mt-1">
+                <p className="blue-text-secondary mt-1">
                   Your basic contact and professional details
                 </p>
               </div>
@@ -301,7 +301,7 @@ const SubmitData = () => {
           <div className="px-8 py-8 space-y-8">
             {/* Basic Information Section */}
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-6 flex items-center">
+              <h3 className="text-lg font-semibold blue-text-primary mb-6 flex items-center">
                 <span className="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
                 Basic Information
               </h3>
@@ -310,9 +310,9 @@ const SubmitData = () => {
                 <div className="group">
                   <label
                     htmlFor="callingName"
-                    className="block text-sm font-semibold text-gray-700 mb-2"
+                    className="block text-sm font-semibold blue-text-secondary mb-2"
                   >
-                    Calling Name <span className="text-red-500">*</span>
+                    Calling Name <span className="text-red-400">*</span>
                   </label>
                   <div className="relative">
                     <input
@@ -321,20 +321,19 @@ const SubmitData = () => {
                       id="callingName"
                       value={formData.callingName}
                       onChange={handleInputChange}
-                      className="block w-full px-4 py-3 border border-gray-200 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200 group-hover:shadow-md bg-white/80 backdrop-blur-sm"
+                      className="blue-input block w-full"
                       placeholder="e.g., John"
                       required
                     />
-                    <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-500/0 to-indigo-500/0 group-hover:from-blue-500/5 group-hover:to-indigo-500/5 transition-all duration-200 pointer-events-none"></div>
                   </div>
                 </div>
 
                 <div className="group">
                   <label
                     htmlFor="fullName"
-                    className="block text-sm font-semibold text-gray-700 mb-2"
+                    className="block text-sm font-semibold blue-text-secondary mb-2"
                   >
-                    Full Name <span className="text-red-500">*</span>
+                    Full Name <span className="text-red-400">*</span>
                   </label>
                   <div className="relative">
                     <input
@@ -343,11 +342,10 @@ const SubmitData = () => {
                       id="fullName"
                       value={formData.fullName}
                       onChange={handleInputChange}
-                      className="block w-full px-4 py-3 border border-gray-200 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200 group-hover:shadow-md bg-white/80 backdrop-blur-sm"
+                      className="blue-input block w-full"
                       placeholder="e.g., John David Smith"
                       required
                     />
-                    <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-500/0 to-indigo-500/0 group-hover:from-blue-500/5 group-hover:to-indigo-500/5 transition-all duration-200 pointer-events-none"></div>
                   </div>
                 </div>
 
@@ -824,7 +822,7 @@ const SubmitData = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="group relative inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transform hover:-translate-y-0.5 transition-all duration-300 overflow-hidden"
+                className="blue-button relative inline-flex items-center justify-center w-full disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="relative flex items-center">

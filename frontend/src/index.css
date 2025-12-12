@@ -2,37 +2,91 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Theme variables for blue-ish dark theme */
+/* Blue Theme Variables */
 :root {
-  --bg-dark-1: #0b1220; /* deep navy */
-  --bg-dark-2: #0f1724; /* slate navy */
-  --card-bg: rgba(255,255,255,0.04);
-  --glass-border: rgba(255,255,255,0.06);
-  --accent-blue: #60a5fa; /* tailwind blue-400 */
-  --accent-indigo: #6366f1; /* indigo-500 */
-  --muted: rgba(255,255,255,0.7);
+  /* Main Colors */
+  --primary-blue: #1e40af;
+  --secondary-blue: #3b82f6;
+  --accent-blue: #60a5fa;
+  --light-blue: #dbeafe;
+  
+  /* Backgrounds */
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-card: #334155;
+  --bg-hover: #475569;
+  
+  /* Text */
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  
+  /* Borders */
+  --border-color: #475569;
+  --border-focus: #60a5fa;
 }
 
-/* Apply base background */
+/* Base styles */
 body {
-  background: linear-gradient(180deg, var(--bg-dark-1), var(--bg-dark-2));
-  color: white;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
 }
 
-/* Global card utility to harmonize pages */
-.app-card {
-  background: var(--card-bg);
-  border: 1px solid var(--glass-border);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border-radius: 1rem; /* 16px */
+/* Component styles */
+.blue-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
-/* Small helpers */
-.text-muted { color: var(--muted); }
-.btn-accent {
-  background: linear-gradient(90deg, var(--accent-blue), var(--accent-indigo));
-  color: white;
+.blue-button {
+  background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+  color: var(--text-primary);
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.blue-button:hover {
+  background: linear-gradient(135deg, var(--secondary-blue), var(--accent-blue));
+  transform: translateY(-1px);
+  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+}
+
+.blue-input {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  color: var(--text-primary);
+  padding: 0.75rem 1rem;
+  transition: all 0.3s ease;
+}
+
+.blue-input:focus {
+  outline: none;
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+}
+
+.blue-nav {
+  background: linear-gradient(90deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95));
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.blue-text-primary {
+  color: var(--text-primary);
+}
+
+.blue-text-secondary {
+  color: var(--text-secondary);
+}
+
+.blue-text-muted {
+  color: var(--text-muted);
 }
 
 /* Custom animations for login page */
