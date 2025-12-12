@@ -4,14 +4,22 @@ import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 
 const Home = () => {
-  const { isAuthenticated, user, loginWithGoogle, logout, refreshUser, refreshing } = useAuth();
+  const {
+    isAuthenticated,
+    user,
+    loginWithGoogle,
+    logout,
+    refreshUser,
+    refreshing,
+  } = useAuth();
   const previousVerificationStatus = useRef(user?.is_verified);
 
   // Watch for verification status changes
   useEffect(() => {
-    if (previousVerificationStatus.current !== undefined && 
-        previousVerificationStatus.current !== user?.is_verified) {
-      
+    if (
+      previousVerificationStatus.current !== undefined &&
+      previousVerificationStatus.current !== user?.is_verified
+    ) {
       if (!previousVerificationStatus.current && user?.is_verified) {
         toast.success("🎉 Your account has been verified!");
       }
@@ -139,7 +147,7 @@ const Home = () => {
                     title="Refresh status"
                   >
                     <svg
-                      className={`w-5 h-5 ${refreshing ? 'animate-spin' : ''}`}
+                      className={`w-5 h-5 ${refreshing ? "animate-spin" : ""}`}
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"

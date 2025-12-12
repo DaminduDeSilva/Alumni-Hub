@@ -10,6 +10,7 @@ const AdminDashboard = () => {
   const [stats, setStats] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedSubmission, setSelectedSubmission] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [approveLoading, setApproveLoading] = useState(false);
   const [rejectLoading, setRejectLoading] = useState(false);
   const [rejectReason, setRejectReason] = useState("");
@@ -412,9 +413,9 @@ const AdminDashboard = () => {
         </div>
 
         {/* Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div>
           {/* Enhanced Pending Submissions */}
-          <div className="lg:col-span-2">
+          <div>
             <div className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20 overflow-hidden">
               <div className="px-8 py-6 border-b border-gray-100 bg-gradient-to-r from-blue-50 to-indigo-50 relative">
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-indigo-500"></div>
@@ -530,7 +531,10 @@ const AdminDashboard = () => {
                           </p>
                         </div>
                         <button
-                          onClick={() => setSelectedSubmission(submission)}
+                          onClick={() => {
+                            setSelectedSubmission(submission);
+                            setIsModalOpen(true);
+                          }}
                           className="ml-4 inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-sm font-semibold rounded-xl hover:from-blue-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transform hover:scale-105 transition-all duration-200 shadow-lg"
                         >
                           <svg
@@ -630,390 +634,157 @@ const AdminDashboard = () => {
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Enhanced Review Panel */}
-          <div>
-            <div className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20 overflow-hidden sticky top-6">
-              <div className="px-8 py-6 border-b border-gray-100 bg-gradient-to-r from-indigo-50 to-blue-50 relative">
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 to-blue-500"></div>
-                <div className="flex items-center">
-                  <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-xl flex items-center justify-center shadow-md mr-4">
-                    <svg
-                      className="w-5 h-5 text-white"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                      />
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                      />
-                    </svg>
-                  </div>
-                  <h2 className="text-lg font-semibold bg-gradient-to-r from-indigo-700 to-blue-700 bg-clip-text text-transparent">
-                    {selectedSubmission
-                      ? "Review Submission"
-                      : "Submission Review"}
-                  </h2>
-                </div>
-              </div>
+        {/* Modal for submission review */}
+        {isModalOpen && selectedSubmission && (
+          <div className="fixed inset-0 z-50 overflow-y-auto">
+            <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+              <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onClick={() => setIsModalOpen(false)}></div>
 
-              <div className="p-8">
-                {selectedSubmission ? (
-                  <div>
-                    <div className="space-y-6">
-                      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-xl border border-blue-100">
-                        <h4 className="text-sm font-semibold text-blue-800 mb-3 flex items-center">
-                          <svg
-                            className="w-4 h-4 mr-2"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                            />
-                          </svg>
-                          Applicant Details
-                        </h4>
-                        <p className="font-semibold text-gray-900 text-lg">
-                          {selectedSubmission.full_name}
-                        </p>
-                        <p className="text-sm text-gray-600 mt-1">
-                          {selectedSubmission.user_email}
-                        </p>
+              <span className="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
+
+              <div className="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
+                <div className="bg-gradient-to-r from-indigo-50 to-blue-50 px-6 py-4 border-b border-gray-200">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-xl flex items-center justify-center shadow-md mr-4">
+                        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                        </svg>
                       </div>
+                      <h3 className="text-lg font-semibold bg-gradient-to-r from-indigo-700 to-blue-700 bg-clip-text text-transparent">
+                        Review Submission
+                      </h3>
+                    </div>
+                    <button
+                      onClick={() => setIsModalOpen(false)}
+                      className="text-gray-400 hover:text-gray-600 p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
 
+                <div className="p-6 max-h-96 overflow-y-auto">
+                  <div className="space-y-4">
+                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-xl border border-blue-100">
+                      <h4 className="text-sm font-semibold text-blue-800 mb-2 flex items-center">
+                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        Applicant Details
+                      </h4>
+                      <p className="font-semibold text-gray-900 text-lg">{selectedSubmission.full_name}</p>
+                      <p className="text-sm text-gray-600 mt-1">{selectedSubmission.user_email}</p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="bg-gradient-to-r from-emerald-50 to-green-50 p-4 rounded-xl border border-emerald-100">
-                        <h4 className="text-sm font-semibold text-emerald-800 mb-3 flex items-center">
-                          <svg
-                            className="w-4 h-4 mr-2"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-                            />
+                        <h4 className="text-sm font-semibold text-emerald-800 mb-2 flex items-center">
+                          <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                           </svg>
                           Engineering Field
                         </h4>
-                        <p className="font-semibold text-gray-900 text-lg">
-                          {selectedSubmission.field}
-                        </p>
+                        <p className="font-semibold text-gray-900">{selectedSubmission.field}</p>
                       </div>
 
                       <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-xl border border-purple-100">
-                        <h4 className="text-sm font-semibold text-purple-800 mb-3 flex items-center">
-                          <svg
-                            className="w-4 h-4 mr-2"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                            />
+                        <h4 className="text-sm font-semibold text-purple-800 mb-2 flex items-center">
+                          <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                           </svg>
-                          Contact Information
+                          Contact
                         </h4>
-                        <p className="font-medium text-gray-900">
-                          {selectedSubmission.whatsapp_mobile}
-                        </p>
-                        <p className="text-sm text-gray-600 mt-1">
-                          {selectedSubmission.email}
-                        </p>
+                        <p className="font-medium text-gray-900 text-sm">{selectedSubmission.whatsapp_mobile}</p>
+                        <p className="text-sm text-gray-600">{selectedSubmission.email}</p>
                       </div>
 
                       <div className="bg-gradient-to-r from-amber-50 to-yellow-50 p-4 rounded-xl border border-amber-100">
-                        <h4 className="text-sm font-semibold text-amber-800 mb-3 flex items-center">
-                          <svg
-                            className="w-4 h-4 mr-2"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                            />
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                            />
+                        <h4 className="text-sm font-semibold text-amber-800 mb-2 flex items-center">
+                          <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                          Submitted
+                        </h4>
+                        <p className="text-sm text-gray-700">{new Date(selectedSubmission.created_at).toLocaleDateString()}</p>
+                      </div>
+
+                      <div className="bg-gradient-to-r from-cyan-50 to-blue-50 p-4 rounded-xl border border-cyan-100">
+                        <h4 className="text-sm font-semibold text-cyan-800 mb-2 flex items-center">
+                          <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                           </svg>
                           Location
                         </h4>
-                        <p className="font-medium text-gray-900">
-                          {selectedSubmission.country}
-                        </p>
-                        {selectedSubmission.working_place && (
-                          <p className="text-sm text-gray-600 mt-1">
-                            {selectedSubmission.working_place}
-                          </p>
-                        )}
-                      </div>
-
-                      {/* Enhanced Photos */}
-                      <div className="grid grid-cols-2 gap-4">
-                        {selectedSubmission.university_photo_url && (
-                          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-3 rounded-xl border border-blue-100">
-                            <h4 className="text-xs font-semibold text-blue-800 mb-3 flex items-center">
-                              <svg
-                                className="w-3 h-3 mr-1"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth="2"
-                                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                                />
-                              </svg>
-                              University Photo
-                            </h4>
-                            <img
-                              src={selectedSubmission.university_photo_url}
-                              alt="University"
-                              className="w-full h-28 object-cover rounded-lg shadow-md"
-                            />
-                          </div>
-                        )}
-
-                        {selectedSubmission.current_photo_url && (
-                          <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-3 rounded-xl border border-green-100">
-                            <h4 className="text-xs font-semibold text-green-800 mb-3 flex items-center">
-                              <svg
-                                className="w-3 h-3 mr-1"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth="2"
-                                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                                />
-                              </svg>
-                              Current Photo
-                            </h4>
-                            <img
-                              src={selectedSubmission.current_photo_url}
-                              alt="Current"
-                              className="w-full h-28 object-cover rounded-lg shadow-md"
-                            />
-                          </div>
-                        )}
+                        <p className="text-sm text-gray-700">{selectedSubmission.country}</p>
                       </div>
                     </div>
 
-                    {/* Enhanced Approval Actions */}
-                    <div className="mt-8 space-y-6">
-                      <div className="bg-gradient-to-r from-slate-50 to-gray-50 p-4 rounded-xl border border-gray-200">
-                        <label className="block text-sm font-semibold text-gray-700 mb-3">
-                          <svg
-                            className="w-4 h-4 inline mr-2"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-                            />
-                          </svg>
-                          Admin Role Assignment
-                        </label>
-                        <select
-                          className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
-                          onChange={(e) => {
-                            setSelectedSubmission({
-                              ...selectedSubmission,
-                              assignedField: e.target.value,
-                            });
-                          }}
-                        >
-                          <option value="">✨ Regular Verified User</option>
-                          <option value={selectedSubmission.field}>
-                            🛡️ Field Admin ({selectedSubmission.field})
-                          </option>
-                        </select>
-                      </div>
-
-                      <div className="flex space-x-3">
-                        <button
-                          onClick={() =>
-                            handleApprove(
-                              selectedSubmission.id,
-                              selectedSubmission.assignedField
-                            )
-                          }
-                          disabled={approveLoading}
-                          className="flex-1 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold rounded-xl hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 transition-all duration-200 shadow-lg flex items-center justify-center"
-                        >
-                          <svg
-                            className="w-5 h-5 mr-2"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M5 13l4 4L19 7"
-                            />
-                          </svg>
-                          {approveLoading ? "Approving..." : "Approve"}
-                        </button>
-
-                        <button
-                          onClick={() => {
-                            const reason = prompt("Enter rejection reason:");
-                            if (reason) {
-                              setRejectReason(reason);
-                              handleReject(selectedSubmission.id);
-                            }
-                          }}
-                          disabled={rejectLoading}
-                          className="flex-1 px-6 py-3 bg-gradient-to-r from-red-500 to-pink-600 text-white font-semibold rounded-xl hover:from-red-600 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 transition-all duration-200 shadow-lg flex items-center justify-center"
-                        >
-                          <svg
-                            className="w-5 h-5 mr-2"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M6 18L18 6M6 6l12 12"
-                            />
-                          </svg>
-                          Reject
-                        </button>
-                      </div>
-
-                      <button
-                        onClick={() => setSelectedSubmission(null)}
-                        className="w-full px-6 py-3 bg-gradient-to-r from-gray-500 to-slate-600 text-white font-medium rounded-xl hover:from-gray-600 hover:to-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transform hover:scale-105 transition-all duration-200 shadow-lg flex items-center justify-center"
-                      >
-                        <svg
-                          className="w-5 h-5 mr-2"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M15 19l-7-7 7-7"
-                          />
-                        </svg>
-                        Back to List
-                      </button>
+                    <div className="mt-4">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Rejection Reason (Optional)
+                      </label>
+                      <textarea
+                        value={rejectReason}
+                        onChange={(e) => setRejectReason(e.target.value)}
+                        placeholder="Please provide a reason for rejection..."
+                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 resize-none text-sm"
+                        rows={3}
+                      />
                     </div>
                   </div>
-                ) : (
-                  <div className="flex flex-col items-center justify-center py-16 px-6">
-                    {/* Background decoration */}
-                    <div className="relative">
-                      <div className="absolute -top-4 -left-4 w-24 h-24 bg-gradient-to-br from-blue-500/20 to-indigo-500/20 rounded-full blur-2xl"></div>
-                      <div className="absolute -bottom-4 -right-4 w-20 h-20 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-full blur-2xl"></div>
-                      
-                      {/* Main icon container */}
-                      <div className="relative w-32 h-32 bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-2xl transform hover:scale-105 transition-transform duration-300">
-                        <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-3xl"></div>
-                        
-                        {/* Document stack icon */}
-                        <div className="relative z-10">
-                          <svg
-                            className="w-16 h-16 text-white"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="1.5"
-                              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                            />
-                          </svg>
-                          
-                          {/* Secondary documents for stack effect */}
-                          <div className="absolute -top-2 -right-2 w-8 h-10 bg-white/30 rounded-lg transform rotate-12"></div>
-                          <div className="absolute -top-1 -right-1 w-6 h-8 bg-white/20 rounded-md transform rotate-6"></div>
-                        </div>
-                      </div>
-                    </div>
+                </div>
 
-                    {/* Content */}
-                    <div className="text-center max-w-md">
-                      <h3 className="text-2xl font-bold text-gray-900 mb-3">
-                        Ready to Review
-                      </h3>
-                      <p className="text-gray-600 text-lg leading-relaxed mb-6">
-                        Select a submission from the list to review detailed information and take action
-                      </p>
-                      
-                      {/* Feature highlights */}
-                      <div className="grid grid-cols-2 gap-4 mt-8">
-                        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 border border-blue-100">
-                          <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center mx-auto mb-3">
-                            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                          </div>
-                          <h4 className="text-sm font-semibold text-blue-900 mb-1">Quick Actions</h4>
-                          <p className="text-xs text-blue-700">Approve or reject with one click</p>
-                        </div>
-                        
-                        <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-4 border border-purple-100">
-                          <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-600 rounded-lg flex items-center justify-center mx-auto mb-3">
-                            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                          </div>
-                          <h4 className="text-sm font-semibold text-purple-900 mb-1">Full Details</h4>
-                          <p className="text-xs text-purple-700">View complete application info</p>
-                        </div>
+                <div className="bg-gray-50 px-6 py-4 flex flex-col sm:flex-row sm:justify-end gap-3">
+                  <button
+                    onClick={() => setIsModalOpen(false)}
+                    className="w-full sm:w-auto px-6 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => {
+                      handleReject(selectedSubmission.id);
+                      setIsModalOpen(false);
+                    }}
+                    disabled={approveLoading || rejectLoading}
+                    className="w-full sm:w-auto bg-gradient-to-r from-red-500 to-pink-600 text-white px-6 py-2 rounded-lg hover:from-red-600 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-medium text-sm"
+                  >
+                    {rejectLoading ? (
+                      <div className="flex items-center justify-center">
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                        Rejecting...
                       </div>
-                    </div>
-                  </div>
-                )}
+                    ) : (
+                      "Reject"
+                    )}
+                  </button>
+                  <button
+                    onClick={() => {
+                      handleApprove(selectedSubmission.id);
+                      setIsModalOpen(false);
+                    }}
+                    disabled={approveLoading || rejectLoading}
+                    className="w-full sm:w-auto bg-gradient-to-r from-green-500 to-emerald-600 text-white px-6 py-2 rounded-lg hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-medium text-sm"
+                  >
+                    {approveLoading ? (
+                      <div className="flex items-center justify-center">
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                        Approving...
+                      </div>
+                    ) : (
+                      "Approve"
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

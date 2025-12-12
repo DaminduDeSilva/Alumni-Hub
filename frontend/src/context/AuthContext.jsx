@@ -14,8 +14,12 @@ export const AuthProvider = ({ children }) => {
   // Check if user is logged in on mount
   useEffect(() => {
     checkAuth();
-    
-    // Set up periodic user data refresh every 30 seconds for unverified users
+  }, []);
+
+  // Set up periodic user data refresh for unverified users
+  useEffect(() => {
+    if (!user) return;
+
     const interval = setInterval(() => {
       if (user && !user.is_verified) {
         refreshUser();
@@ -23,7 +27,7 @@ export const AuthProvider = ({ children }) => {
     }, 30000);
 
     return () => clearInterval(interval);
-  }, [user]);
+  }, [user?.is_verified]); // Only depend on verification status, not entire user object
 
   const checkAuth = async () => {
     const token = localStorage.getItem("token");
