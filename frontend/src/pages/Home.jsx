@@ -1,9 +1,32 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const Home = () => {
-  const { isAuthenticated, user, loginWithGoogle, logout } = useAuth();
+  const { isAuthenticated, user, loginWithGoogle, logout, refreshUser, refreshing } = useAuth();
+  const previousVerificationStatus = useRef(user?.is_verified);
+
+  // Watch for verification status changes
+  useEffect(() => {
+    if (previousVerificationStatus.current !== undefined && 
+        previousVerificationStatus.current !== user?.is_verified) {
+      
+      if (!previousVerificationStatus.current && user?.is_verified) {
+        toast.success("🎉 Your account has been verified!");
+      }
+    }
+    previousVerificationStatus.current = user?.is_verified;
+  }, [user?.is_verified]);
+
+  const handleStatusRefresh = async () => {
+    try {
+      await refreshUser();
+      // Don't show success message here since useEffect will handle status change notifications
+    } catch (error) {
+      toast.error("Failed to refresh status");
+    }
+  };
 
   if (isAuthenticated) {
     return (
@@ -71,36 +94,65 @@ const Home = () => {
                     : "bg-gradient-to-br from-amber-500/10 to-yellow-600/5"
                 }`}
               ></div>
-              <div className="flex items-center relative z-10">
-                <div className="flex-shrink-0">
-                  <div
-                    className={`w-12 h-12 rounded-xl flex items-center justify-center shadow-lg ${
-                      user?.is_verified
-                        ? "bg-gradient-to-br from-emerald-500 to-green-600"
-                        : "bg-gradient-to-br from-amber-500 to-yellow-600"
-                    }`}
-                  >
-                    <svg
-                      className="w-6 h-6 text-white"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
+              <div className="flex items-center justify-between relative z-10">
+                <div className="flex items-center">
+                  <div className="flex-shrink-0">
+                    <div
+                      className={`w-12 h-12 rounded-xl flex items-center justify-center shadow-lg ${
+                        user?.is_verified
+                          ? "bg-gradient-to-br from-emerald-500 to-green-600"
+                          : "bg-gradient-to-br from-amber-500 to-yellow-600"
+                      }`}
                     >
-                      <path
-                        fillRule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                      <svg
+                        className="w-6 h-6 text-white"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                  <div className="ml-4">
+                    <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide">
+                      Status
+                    </h3>
+                    <p className="text-xl font-bold text-gray-900 mt-1">
+                      {user?.is_verified ? "Verified" : "Pending Verification"}
+                    </p>
+                    {!user?.is_verified && (
+                      <p className="text-xs text-gray-500 mt-1">
+                        Auto-refreshing every 30 seconds
+                      </p>
+                    )}
                   </div>
                 </div>
-                <div className="ml-4">
-                  <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide">
-                    Status
-                  </h3>
-                  <p className="text-xl font-bold text-gray-900 mt-1">
-                    {user?.is_verified ? "Verified" : "Pending Verification"}
-                  </p>
-                </div>
+                {!user?.is_verified && (
+                  <button
+                    onClick={handleStatusRefresh}
+                    disabled={refreshing}
+                    className="ml-4 p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-200 disabled:opacity-50"
+                    title="Refresh status"
+                  >
+                    <svg
+                      className={`w-5 h-5 ${refreshing ? 'animate-spin' : ''}`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                      />
+                    </svg>
+                  </button>
+                )}
               </div>
             </div>
 

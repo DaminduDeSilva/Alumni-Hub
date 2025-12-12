@@ -37,7 +37,6 @@ const CommitteeLogin = () => {
         <div className="relative bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 overflow-hidden">
           {/* Header decoration */}
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500"></div>
-
           <div className="p-8">
             {/* Header with improved back navigation */}
             <div className="text-center mb-8">
@@ -82,9 +81,7 @@ const CommitteeLogin = () => {
               <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 bg-clip-text text-transparent mb-2">
                 Committee Portal
               </h1>
-              <p className="text-gray-600 text-lg">
-                Administrative Access
-              </p>
+              <p className="text-gray-600 text-lg">Administrative Access</p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -225,7 +222,8 @@ const CommitteeLogin = () => {
                 )}
               </button>
             </form>
-          </div>          {/* Footer section */}
+          </div>{" "}
+          {/* Footer section */}
           <div className="px-8 pb-6 border-t border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100/50">
             <div className="text-center space-y-4 pt-6">
               <p className="text-gray-600 text-sm">

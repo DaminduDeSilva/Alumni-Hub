@@ -943,32 +943,71 @@ const AdminDashboard = () => {
                     </div>
                   </div>
                 ) : (
-                  <div className="text-center py-12">
-                    <div className="w-20 h-20 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-                      <svg
-                        className="w-10 h-10 text-white"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                        />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                        />
-                      </svg>
+                  <div className="flex flex-col items-center justify-center py-16 px-6">
+                    {/* Background decoration */}
+                    <div className="relative">
+                      <div className="absolute -top-4 -left-4 w-24 h-24 bg-gradient-to-br from-blue-500/20 to-indigo-500/20 rounded-full blur-2xl"></div>
+                      <div className="absolute -bottom-4 -right-4 w-20 h-20 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-full blur-2xl"></div>
+                      
+                      {/* Main icon container */}
+                      <div className="relative w-32 h-32 bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-2xl transform hover:scale-105 transition-transform duration-300">
+                        <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-3xl"></div>
+                        
+                        {/* Document stack icon */}
+                        <div className="relative z-10">
+                          <svg
+                            className="w-16 h-16 text-white"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="1.5"
+                              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                            />
+                          </svg>
+                          
+                          {/* Secondary documents for stack effect */}
+                          <div className="absolute -top-2 -right-2 w-8 h-10 bg-white/30 rounded-lg transform rotate-12"></div>
+                          <div className="absolute -top-1 -right-1 w-6 h-8 bg-white/20 rounded-md transform rotate-6"></div>
+                        </div>
+                      </div>
                     </div>
-                    <p className="text-gray-600 mb-6 text-lg">
-                      Select a submission from the list to review detailed
-                      information and take action
-                    </p>
+
+                    {/* Content */}
+                    <div className="text-center max-w-md">
+                      <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                        Ready to Review
+                      </h3>
+                      <p className="text-gray-600 text-lg leading-relaxed mb-6">
+                        Select a submission from the list to review detailed information and take action
+                      </p>
+                      
+                      {/* Feature highlights */}
+                      <div className="grid grid-cols-2 gap-4 mt-8">
+                        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 border border-blue-100">
+                          <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center mx-auto mb-3">
+                            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                          </div>
+                          <h4 className="text-sm font-semibold text-blue-900 mb-1">Quick Actions</h4>
+                          <p className="text-xs text-blue-700">Approve or reject with one click</p>
+                        </div>
+                        
+                        <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-4 border border-purple-100">
+                          <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-600 rounded-lg flex items-center justify-center mx-auto mb-3">
+                            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                          </div>
+                          <h4 className="text-sm font-semibold text-purple-900 mb-1">Full Details</h4>
+                          <p className="text-xs text-purple-700">View complete application info</p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>

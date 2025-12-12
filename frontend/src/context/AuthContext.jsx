@@ -8,12 +8,22 @@ export const useAuth = () => useContext(AuthContext);
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState(null);
 
   // Check if user is logged in on mount
   useEffect(() => {
     checkAuth();
-  }, []);
+    
+    // Set up periodic user data refresh every 30 seconds for unverified users
+    const interval = setInterval(() => {
+      if (user && !user.is_verified) {
+        refreshUser();
+      }
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, [user]);
 
   const checkAuth = async () => {
     const token = localStorage.getItem("token");
@@ -32,6 +42,26 @@ export const AuthProvider = ({ children }) => {
       setUser(null);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Function to refresh user data without showing loading state
+  const refreshUser = async () => {
+    const token = localStorage.getItem("token");
+
+    if (!token || !user) {
+      return;
+    }
+
+    setRefreshing(true);
+    try {
+      const response = await api.get("/auth/me");
+      setUser(response.data.user);
+    } catch (err) {
+      console.error("User refresh failed:", err);
+      // Don't logout on refresh failure, just log the error
+    } finally {
+      setRefreshing(false);
     }
   };
 
@@ -77,11 +107,13 @@ export const AuthProvider = ({ children }) => {
   const value = {
     user,
     loading,
+    refreshing,
     error,
     login,
     loginWithGoogle,
     handleGoogleCallback,
     logout,
+    refreshUser,
     isAuthenticated: !!user,
     isAdmin: user?.role === "SUPER_ADMIN" || user?.role === "FIELD_ADMIN",
     isVerified: user?.is_verified || user?.role !== "UNVERIFIED",
