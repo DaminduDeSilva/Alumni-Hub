@@ -182,9 +182,16 @@ function App() {
   return (
     <Router>
       <AuthProvider>
-        <Navigation />
-        <AppRoutes />
-        <Toaster position="top-right" />
+        <div className="min-h-screen bg-[color:var(--bg-dark-1)] text-white">
+          <Navigation />
+          <div className="max-w-6xl mx-auto px-4 py-8">
+            {/* Page container to provide consistent card background on pages */}
+            <div className="app-card p-6">
+              <AppRoutes />
+            </div>
+          </div>
+          <Toaster position="top-right" />
+        </div>
       </AuthProvider>
     </Router>
   );
