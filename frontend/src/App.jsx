@@ -182,11 +182,9 @@ function App() {
   return (
     <Router>
       <AuthProvider>
-        <div className="min-h-screen" style={{ backgroundColor: 'var(--bg-primary)' }}>
-          <Navigation />
-          <AppRoutes />
-          <Toaster position="top-right" />
-        </div>
+        <Navigation />
+        <AppRoutes />
+        <Toaster position="top-right" />
       </AuthProvider>
     </Router>
   );

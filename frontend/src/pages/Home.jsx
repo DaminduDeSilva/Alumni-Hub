@@ -7,17 +7,17 @@ const Home = () => {
 
   if (isAuthenticated) {
     return (
-      <div className="min-h-screen" style={{ backgroundColor: 'var(--bg-primary)' }}>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Welcome Header with enhanced styling */}
           <div className="mb-12">
-            <div className="blue-card p-8 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/10 to-blue-600/10 rounded-bl-full"></div>
+            <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-bl-full"></div>
               <div className="relative z-10">
-                <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-200 to-blue-400 bg-clip-text text-transparent">
+                <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 bg-clip-text text-transparent">
                   Welcome back, {user?.full_name?.split(" ")[0] || user?.email}
                 </h1>
-                <p className="blue-text-secondary mt-3 text-lg leading-relaxed">
+                <p className="text-gray-600 mt-3 text-lg leading-relaxed">
                   {user?.role === "SUPER_ADMIN" &&
                     "Manage the alumni network and field administrators"}
                   {user?.role === "FIELD_ADMIN" &&
@@ -33,7 +33,7 @@ const Home = () => {
 
           {/* Enhanced Status Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-            <div className="blue-card p-6 hover:shadow-xl transition-all duration-300 relative overflow-hidden">
+            <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 hover:shadow-xl transition-all duration-300 relative overflow-hidden">
               <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-blue-500/10 to-blue-600/5 rounded-bl-2xl"></div>
               <div className="flex items-center relative z-10">
                 <div className="flex-shrink-0">
@@ -52,10 +52,10 @@ const Home = () => {
                   </div>
                 </div>
                 <div className="ml-4">
-                  <h3 className="text-sm font-medium blue-text-muted uppercase tracking-wide">
+                  <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide">
                     Role
                   </h3>
-                  <p className="text-xl font-bold blue-text-primary capitalize mt-1">
+                  <p className="text-xl font-bold text-gray-900 capitalize mt-1">
                     {user?.role?.toLowerCase().replace("_", " ")}
                     {user?.assigned_field && ` - ${user?.assigned_field}`}
                   </p>
@@ -63,7 +63,7 @@ const Home = () => {
               </div>
             </div>
 
-            <div className="blue-card p-6 hover:shadow-xl transition-all duration-300 relative overflow-hidden">
+            <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 hover:shadow-xl transition-all duration-300 relative overflow-hidden">
               <div
                 className={`absolute top-0 right-0 w-16 h-16 rounded-bl-2xl ${
                   user?.is_verified
