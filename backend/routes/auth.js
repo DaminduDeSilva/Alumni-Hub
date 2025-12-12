@@ -77,9 +77,9 @@ const generateToken = (user) => {
       id: user.id,
       email: user.email,
       role: user.role,
-      fullName: user.full_name,
-      assignedField: user.assigned_field,
-      isVerified: user.is_verified,
+      full_name: user.full_name,
+      assigned_field: user.assigned_field,
+      is_verified: user.is_verified,
     },
     process.env.JWT_SECRET,
     { expiresIn: process.env.JWT_EXPIRES_IN }
@@ -131,9 +131,10 @@ router.post("/login", async (req, res) => {
         id: user.id,
         email: user.email,
         role: user.role,
-        fullName: user.full_name,
-        assignedField: user.assigned_field,
-        isVerified: user.is_verified,
+        full_name: user.full_name,
+        assigned_field: user.assigned_field,
+        is_verified: user.is_verified,
+        verification_status: user.verification_status,
       },
     });
   } catch (error) {
