@@ -103,6 +103,18 @@ const Events = () => {
     }
   };
 
+  const handleDeleteEvent = async (eventId) => {
+    if (window.confirm("Are you sure you want to delete this event?")) {
+      try {
+        await api.delete(`/events/${eventId}`);
+        toast.success("Event deleted successfully");
+        fetchEvents();
+      } catch (error) {
+        toast.error(error.response?.data?.error || "Failed to delete event");
+      }
+    }
+  };
+
   const formatDate = (dateString) => {
     return format(new Date(dateString), "MMMM d, yyyy");
   };
@@ -380,18 +392,28 @@ const Events = () => {
                           </button>
                         )}
                         {isSuperAdmin && (
-                          <button
-                            onClick={() =>
-                              setShowEventDetails(
-                                showEventDetails === event.id ? null : event.id
-                              )
-                            }
-                            className="flex-1 text-blue-600 hover:text-blue-800 border border-blue-600 py-2 rounded-md"
-                          >
-                            {showEventDetails === event.id
-                              ? "Hide Details"
-                              : "View Details"}
-                          </button>
+                          <>
+                            <button
+                              onClick={() =>
+                                setShowEventDetails(
+                                  showEventDetails === event.id
+                                    ? null
+                                    : event.id
+                                )
+                              }
+                              className="flex-1 text-blue-600 hover:text-blue-800 border border-blue-600 py-2 rounded-md"
+                            >
+                              {showEventDetails === event.id
+                                ? "Hide Details"
+                                : "View Details"}
+                            </button>
+                            <button
+                              onClick={() => handleDeleteEvent(event.id)}
+                              className="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 rounded-md"
+                            >
+                              Delete
+                            </button>
+                          </>
                         )}
                       </div>
                     )}
