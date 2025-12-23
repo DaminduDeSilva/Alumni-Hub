@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
     checkAuth();
   }, []);
 
-  // Set up periodic user data refresh for unverified users
+  // Set up periodic user data refresh for unverified users.
   useEffect(() => {
     if (!user) return;
 
