@@ -1,11 +1,16 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import LogoutButton from "./LogoutButton";
+import api from "../utils/api";
 
 const Navigation = () => {
   const { user, isAuthenticated } = useAuth();
   const location = useLocation();
+  const [pendingCount, setPendingCount] = useState(0);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [hasUnreadApproval, setHasUnreadApproval] = useState(false);
+  const notificationRef = useRef(null);
 
   if (!isAuthenticated) {
     return null;
@@ -25,6 +30,66 @@ const Navigation = () => {
       {children}
     </Link>
   );
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        notificationRef.current &&
+        !notificationRef.current.contains(event.target)
+      ) {
+        setShowNotifications(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // Fetch Admin Pending Count
+  useEffect(() => {
+    if (user?.role === "SUPER_ADMIN" || user?.role === "FIELD_ADMIN") {
+      const fetchPending = async () => {
+        try {
+          const res = await api.get("/admin/submissions/pending");
+          setPendingCount(res.data.submissions.length);
+        } catch (err) {
+          console.error("Failed to fetch pending count", err);
+        }
+      };
+      
+      fetchPending();
+      // Poll every minute for updates
+      const interval = setInterval(fetchPending, 60000);
+      return () => clearInterval(interval);
+    }
+  }, [user]);
+
+  // Check User Verification Notification
+  useEffect(() => {
+    if (user?.role === "VERIFIED_USER") {
+      const seen = localStorage.getItem("hasSeenApproval");
+      if (!seen) {
+        setHasUnreadApproval(true);
+      }
+    }
+  }, [user]);
+
+  const handleNotificationClick = () => {
+    setShowNotifications(!showNotifications);
+    
+    // Mark user approval as read when opening notifications
+    if (hasUnreadApproval && !showNotifications) {
+      localStorage.setItem("hasSeenApproval", "true");
+      setHasUnreadApproval(false);
+    }
+  };
+
+  const notificationCount =
+    (user?.role === "SUPER_ADMIN" || user?.role === "FIELD_ADMIN"
+      ? pendingCount
+      : 0) + (hasUnreadApproval ? 1 : 0);
 
   return (
     <nav className="bg-primary shadow-md sticky top-0 z-50 border-b border-primary-dark">
@@ -94,6 +159,78 @@ const Navigation = () => {
 
           {/* Right side actions */}
           <div className="flex items-center space-x-6">
+            {/* Notification Bell */}
+             {(user?.role === "SUPER_ADMIN" || user?.role === "FIELD_ADMIN" || user?.role === "VERIFIED_USER") && (
+              <div className="relative" ref={notificationRef}>
+                <button
+                  onClick={handleNotificationClick}
+                  className="relative p-2 text-gray-300 hover:text-white transition-colors duration-200 focus:outline-none"
+                  aria-label="Notifications"
+                >
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                    />
+                  </svg>
+                  {notificationCount > 0 && (
+                    <span className="absolute top-0 right-0 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-bold leading-none text-white transform translate-x-1/4 -translate-y-1/4 bg-red-600 rounded-full border border-primary">
+                      {notificationCount}
+                    </span>
+                  )}
+                </button>
+
+                {showNotifications && (
+                  <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl py-2 z-50 border border-gray-200">
+                    <div className="px-4 py-2 border-b border-gray-100">
+                      <h3 className="text-sm font-bold text-gray-700 uppercase tracking-wider">
+                        Notifications
+                      </h3>
+                    </div>
+                    
+                    <div className="max-h-64 overflow-y-auto">
+                      {(user?.role === "SUPER_ADMIN" || user?.role === "FIELD_ADMIN") && (
+                        <>
+                           {pendingCount > 0 ? (
+                            <Link
+                              to="/admin"
+                              className="block px-4 py-3 hover:bg-gray-50 transition-colors border-l-4 border-secondary"
+                              onClick={() => setShowNotifications(false)}
+                            >
+                              <p className="text-sm font-bold text-primary">Pending Reviews</p>
+                              <p className="text-xs text-gray-500 mt-1">
+                                You have <span className="font-bold text-secondary">{pendingCount}</span> submission{pendingCount !== 1 && 's'} waiting for approval.
+                              </p>
+                            </Link>
+                          ) : (
+                             <div className="px-4 py-4 text-center text-gray-500">
+                                <p className="text-sm">No pending submissions.</p>
+                             </div>
+                          )}
+                        </>
+                      )}
+
+                      {user?.role === "VERIFIED_USER" && (
+                         <div className="px-4 py-3 border-l-4 border-green-500 bg-green-50">
+                            <p className="text-sm font-bold text-green-800">Account Verified</p>
+                            <p className="text-xs text-green-600 mt-1">
+                               Congratulations! Your profile has been approved and you are now a verified member.
+                            </p>
+                         </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
             {user?.role === "UNVERIFIED" && (
               <Link
                 to="/submit"
