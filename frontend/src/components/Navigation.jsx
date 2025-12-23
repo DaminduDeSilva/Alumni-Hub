@@ -55,6 +55,22 @@ const Navigation = () => {
               Home
             </Link>
 
+            {/* Events link for all verified users and admins */}
+            {(user?.role === "VERIFIED_USER" ||
+              user?.role === "SUPER_ADMIN" ||
+              user?.role === "FIELD_ADMIN") && (
+              <Link
+                to="/events"
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                  isActive("/events")
+                    ? "bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-lg"
+                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                }`}
+              >
+                Events
+              </Link>
+            )}
+
             {/* User-specific links based on role */}
             {user?.role === "VERIFIED_USER" && (
               <>

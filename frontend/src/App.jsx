@@ -19,6 +19,8 @@ import FieldAdmins from "./pages/admin/FieldAdmins";
 import MyProfile from "./pages/MyProfile";
 import Directory from "./pages/Directory";
 import Reports from "./pages/Reports";
+import Events from "./pages/Events";
+import EventAttendance from "./pages/EventAttendance";
 
 // Protected route component
 const ProtectedRoute = ({
@@ -133,6 +135,24 @@ function AppRoutes() {
         element={
           <ProtectedRoute requireAdmin>
             <Reports />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/events"
+        element={
+          <ProtectedRoute requireVerified>
+            <Events />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/events/:eventId/attendance"
+        element={
+          <ProtectedRoute requireAdmin>
+            <EventAttendance />
           </ProtectedRoute>
         }
       />
