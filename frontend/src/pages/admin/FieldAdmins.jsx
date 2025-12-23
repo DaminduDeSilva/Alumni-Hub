@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../utils/api";
+import ConfirmationModal from "../../components/ConfirmationModal";
 
 const FieldAdmins = () => {
   const navigate = useNavigate();
@@ -12,6 +13,7 @@ const FieldAdmins = () => {
   const [selectedUser, setSelectedUser] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [confirmModalConfig, setConfirmModalConfig] = useState(null);
 
   const ENGINEERING_FIELDS = [
     "Chemical",
@@ -99,8 +101,18 @@ const FieldAdmins = () => {
     }
   };
 
-  const handleRemoveAdmin = async (field) => {
-    if (!window.confirm(`Remove the admin for ${field} field?`)) return;
+  const handleRemoveAdmin = (field) => {
+    setConfirmModalConfig({
+      field: field,
+      isOpen: true,
+    });
+  };
+
+  const confirmRemoveAdmin = async () => {
+    if (!confirmModalConfig || !confirmModalConfig.field) return;
+
+    const field = confirmModalConfig.field;
+    setConfirmModalConfig(null);
 
     try {
       const response = await api.delete(`/field-admins/${field}`);
@@ -349,6 +361,17 @@ const FieldAdmins = () => {
           </button>
         </div>
       </div>
+
+
+      <ConfirmationModal
+        isOpen={confirmModalConfig?.isOpen}
+        onClose={() => setConfirmModalConfig(null)}
+        onConfirm={confirmRemoveAdmin}
+        title="Remove Field Admin"
+        message={`Are you sure you want to remove the administrator for the ${confirmModalConfig?.field} field?`}
+        confirmText="Remove"
+        isDangerous={true}
+      />
     </div>
   );
 };

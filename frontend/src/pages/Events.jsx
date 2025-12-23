@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import api from "../utils/api";
 import { toast } from "react-hot-toast";
 import { format } from "date-fns";
+import ConfirmationModal from "../components/ConfirmationModal";
 
 const Events = () => {
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ const Events = () => {
   const [loading, setLoading] = useState(true);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showEventDetails, setShowEventDetails] = useState(null);
+  const [deleteEventId, setDeleteEventId] = useState(null);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -103,15 +105,20 @@ const Events = () => {
     }
   };
 
-  const handleDeleteEvent = async (eventId) => {
-    if (window.confirm("Are you sure you want to delete this event?")) {
-      try {
-        await api.delete(`/events/${eventId}`);
-        toast.success("Event deleted successfully");
-        fetchEvents();
-      } catch (error) {
-        toast.error(error.response?.data?.error || "Failed to delete event");
-      }
+  const handleDeleteEvent = (eventId) => {
+    setDeleteEventId(eventId);
+  };
+
+  const confirmDeleteEvent = async () => {
+    if (!deleteEventId) return;
+    
+    try {
+      await api.delete(`/events/${deleteEventId}`);
+      toast.success("Event deleted successfully");
+      fetchEvents();
+      setDeleteEventId(null);
+    } catch (error) {
+      toast.error(error.response?.data?.error || "Failed to delete event");
     }
   };
 
@@ -456,6 +463,16 @@ const Events = () => {
           )}
         </div>
       </div>
+
+      <ConfirmationModal
+        isOpen={!!deleteEventId}
+        onClose={() => setDeleteEventId(null)}
+        onConfirm={confirmDeleteEvent}
+        title="Delete Event"
+        message="Are you sure you want to delete this event? This action cannot be undone."
+        confirmText="Delete"
+        isDangerous={true}
+      />
     </div>
   );
 };
