@@ -216,7 +216,9 @@ const Home = () => {
                 <div>
                   <dt className="text-sm font-bold text-secondary uppercase">Member Since</dt>
                   <dd className="mt-1 text-lg text-primary">
-                    {user?.created_at ? new Date(user.created_at).toLocaleDateString() : "N/A"}
+                    {user?.created_at || user?.createdAt
+                      ? new Date(user.created_at || user.createdAt).toLocaleDateString()
+                      : "N/A"}
                   </dd>
                 </div>
                 <div>
