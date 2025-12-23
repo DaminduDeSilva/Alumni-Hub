@@ -8,6 +8,7 @@ import {
 import { Toaster } from "react-hot-toast";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import Navigation from "./components/Navigation";
+import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import CommitteeLogin from "./pages/CommitteeLogin";
 import GoogleCallback from "./pages/GoogleCallback";
@@ -198,12 +199,15 @@ function AppRoutes() {
   );
 }
 
+
+
 function App() {
   return (
     <Router>
       <AuthProvider>
         <Navigation />
         <AppRoutes />
+        <Footer />
         <Toaster position="top-right" />
       </AuthProvider>
     </Router>
