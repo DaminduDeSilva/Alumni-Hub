@@ -451,7 +451,7 @@ const Events = () => {
                           ) : (
                             <button
                               onClick={() => handleRegister(event.id)}
-                              className="w-full bg-primary hover:bg-primary-light text-white py-2 px-4 rounded-md font-semibold transition-colors duration-200"
+                              className="w-full bg-primary hover:bg-primary-light text-white py-2 px-4 rounded-md font-semibold transition-colors duration-200 mb-4"
                             >
                               Register Now
                             </button>
