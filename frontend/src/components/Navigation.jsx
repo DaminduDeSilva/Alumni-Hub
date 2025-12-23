@@ -12,24 +12,7 @@ const Navigation = () => {
   const [hasUnreadApproval, setHasUnreadApproval] = useState(false);
   const notificationRef = useRef(null);
 
-  if (!isAuthenticated) {
-    return null;
-  }
-
   const isActive = (path) => location.pathname === path;
-
-  const NavLink = ({ to, children }) => (
-    <Link
-      to={to}
-      className={`px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
-        isActive(to)
-          ? "bg-secondary text-white shadow-sm"
-          : "text-gray-300 hover:text-white hover:bg-white/10"
-      }`}
-    >
-      {children}
-    </Link>
-  );
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -49,7 +32,10 @@ const Navigation = () => {
 
   // Fetch Admin Pending Count
   useEffect(() => {
-    if (user?.role === "SUPER_ADMIN" || user?.role === "FIELD_ADMIN") {
+    if (
+      isAuthenticated &&
+      (user?.role === "SUPER_ADMIN" || user?.role === "FIELD_ADMIN")
+    ) {
       const fetchPending = async () => {
         try {
           const res = await api.get("/admin/submissions/pending");
@@ -58,27 +44,45 @@ const Navigation = () => {
           console.error("Failed to fetch pending count", err);
         }
       };
-      
+
       fetchPending();
       // Poll every minute for updates
       const interval = setInterval(fetchPending, 60000);
       return () => clearInterval(interval);
     }
-  }, [user]);
+  }, [user, isAuthenticated]);
 
   // Check User Verification Notification
   useEffect(() => {
-    if (user?.role === "VERIFIED_USER") {
+    if (isAuthenticated && user?.role === "VERIFIED_USER") {
       const seen = localStorage.getItem("hasSeenApproval");
       if (!seen) {
         setHasUnreadApproval(true);
       }
     }
-  }, [user]);
+  }, [user, isAuthenticated]);
+
+  // Early return MUST be after all hooks
+  if (!isAuthenticated) {
+    return null;
+  }
+
+  const NavLink = ({ to, children }) => (
+    <Link
+      to={to}
+      className={`px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
+        isActive(to)
+          ? "bg-secondary text-white shadow-sm"
+          : "text-gray-300 hover:text-white hover:bg-white/10"
+      }`}
+    >
+      {children}
+    </Link>
+  );
 
   const handleNotificationClick = () => {
     setShowNotifications(!showNotifications);
-    
+
     // Mark user approval as read when opening notifications
     if (hasUnreadApproval && !showNotifications) {
       localStorage.setItem("hasSeenApproval", "true");
@@ -160,7 +164,9 @@ const Navigation = () => {
           {/* Right side actions */}
           <div className="flex items-center space-x-6">
             {/* Notification Bell */}
-             {(user?.role === "SUPER_ADMIN" || user?.role === "FIELD_ADMIN" || user?.role === "VERIFIED_USER") && (
+            {(user?.role === "SUPER_ADMIN" ||
+              user?.role === "FIELD_ADMIN" ||
+              user?.role === "VERIFIED_USER") && (
               <div className="relative" ref={notificationRef}>
                 <button
                   onClick={handleNotificationClick}
@@ -194,36 +200,47 @@ const Navigation = () => {
                         Notifications
                       </h3>
                     </div>
-                    
+
                     <div className="max-h-64 overflow-y-auto">
-                      {(user?.role === "SUPER_ADMIN" || user?.role === "FIELD_ADMIN") && (
+                      {(user?.role === "SUPER_ADMIN" ||
+                        user?.role === "FIELD_ADMIN") && (
                         <>
-                           {pendingCount > 0 ? (
+                          {pendingCount > 0 ? (
                             <Link
                               to="/admin"
                               className="block px-4 py-3 hover:bg-gray-50 transition-colors border-l-4 border-secondary"
                               onClick={() => setShowNotifications(false)}
                             >
-                              <p className="text-sm font-bold text-primary">Pending Reviews</p>
+                              <p className="text-sm font-bold text-primary">
+                                Pending Reviews
+                              </p>
                               <p className="text-xs text-gray-500 mt-1">
-                                You have <span className="font-bold text-secondary">{pendingCount}</span> submission{pendingCount !== 1 && 's'} waiting for approval.
+                                You have{" "}
+                                <span className="font-bold text-secondary">
+                                  {pendingCount}
+                                </span>{" "}
+                                submission{pendingCount !== 1 && "s"} waiting
+                                for approval.
                               </p>
                             </Link>
                           ) : (
-                             <div className="px-4 py-4 text-center text-gray-500">
-                                <p className="text-sm">No pending submissions.</p>
-                             </div>
+                            <div className="px-4 py-4 text-center text-gray-500">
+                              <p className="text-sm">No pending submissions.</p>
+                            </div>
                           )}
                         </>
                       )}
 
                       {user?.role === "VERIFIED_USER" && (
-                         <div className="px-4 py-3 border-l-4 border-green-500 bg-green-50">
-                            <p className="text-sm font-bold text-green-800">Account Verified</p>
-                            <p className="text-xs text-green-600 mt-1">
-                               Congratulations! Your profile has been approved and you are now a verified member.
-                            </p>
-                         </div>
+                        <div className="px-4 py-3 border-l-4 border-green-500 bg-green-50">
+                          <p className="text-sm font-bold text-green-800">
+                            Account Verified
+                          </p>
+                          <p className="text-xs text-green-600 mt-1">
+                            Congratulations! Your profile has been approved and
+                            you are now a verified member.
+                          </p>
+                        </div>
                       )}
                     </div>
                   </div>
