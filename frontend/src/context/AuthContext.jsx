@@ -120,6 +120,7 @@ export const AuthProvider = ({ children }) => {
     refreshUser,
     isAuthenticated: !!user,
     isAdmin: user?.role === "SUPER_ADMIN" || user?.role === "FIELD_ADMIN",
+    isSuperAdmin: user?.role === "SUPER_ADMIN",
     isVerified: user?.is_verified || user?.role !== "UNVERIFIED",
   };
 
