@@ -13,16 +13,29 @@ const Navigation = () => {
 
   const isActive = (path) => location.pathname === path;
 
+  const NavLink = ({ to, children }) => (
+    <Link
+      to={to}
+      className={`px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
+        isActive(to)
+          ? "bg-secondary text-white shadow-sm"
+          : "text-gray-300 hover:text-white hover:bg-white/10"
+      }`}
+    >
+      {children}
+    </Link>
+  );
+
   return (
-    <nav className="bg-white/95 backdrop-blur-lg border-b border-gray-200 shadow-sm sticky top-0 z-50">
+    <nav className="bg-primary shadow-md sticky top-0 z-50 border-b border-primary-dark">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Enhanced Logo */}
+          {/* Logo */}
           <div className="flex-shrink-0">
-            <Link to="/" className="flex items-center space-x-2 group">
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300">
+            <Link to="/" className="flex items-center space-x-3 group">
+              <div className="w-8 h-8 bg-secondary rounded flex items-center justify-center shadow-sm">
                 <svg
-                  className="w-4 h-4 text-white"
+                  className="w-5 h-5 text-white"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -35,158 +48,68 @@ const Navigation = () => {
                   />
                 </svg>
               </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 bg-clip-text text-transparent group-hover:from-blue-600 group-hover:to-purple-600 transition-all duration-300">
+              <span className="text-xl font-headings font-bold text-white tracking-wide group-hover:text-secondary transition-colors duration-200">
                 Alumni Hub
               </span>
             </Link>
           </div>
 
-          {/* Enhanced Navigation Links */}
-          <div className="hidden md:flex items-center space-x-1">
-            {/* Home */}
-            <Link
-              to="/"
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                isActive("/")
-                  ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg"
-                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-              }`}
-            >
-              Home
-            </Link>
+          {/* Navigation Links */}
+          <div className="hidden md:flex items-center space-x-2">
+            <NavLink to="/">Home</NavLink>
 
-            {/* Events link for all verified users and admins */}
             {(user?.role === "VERIFIED_USER" ||
               user?.role === "SUPER_ADMIN" ||
               user?.role === "FIELD_ADMIN") && (
-              <Link
-                to="/events"
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                  isActive("/events")
-                    ? "bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-lg"
-                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-                }`}
-              >
-                Events
-              </Link>
+              <NavLink to="/events">Events</NavLink>
             )}
 
-            {/* User-specific links based on role */}
             {user?.role === "VERIFIED_USER" && (
               <>
-                <Link
-                  to="/my-profile"
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                    isActive("/my-profile")
-                      ? "bg-gradient-to-r from-emerald-500 to-green-600 text-white shadow-lg"
-                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-                  }`}
-                >
-                  My Profile
-                </Link>
-                <Link
-                  to="/my-submissions"
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                    isActive("/my-submissions")
-                      ? "bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-lg"
-                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-                  }`}
-                >
-                  My Submissions
-                </Link>
+                <NavLink to="/my-profile">My Profile</NavLink>
+                <NavLink to="/my-submissions">My Submissions</NavLink>
               </>
             )}
 
-            {/* Directory for admins */}
             {(user?.role === "SUPER_ADMIN" || user?.role === "FIELD_ADMIN") && (
               <>
-                <Link
-                  to="/directory"
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                    isActive("/directory")
-                      ? "bg-gradient-to-r from-emerald-500 to-green-600 text-white shadow-lg"
-                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-                  }`}
-                >
-                  Directory
-                </Link>
+                <NavLink to="/directory">Directory</NavLink>
 
-                {/* My Profile for field admins */}
                 {user?.role === "FIELD_ADMIN" && (
-                  <Link
-                    to="/my-profile"
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                      isActive("/my-profile")
-                        ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg"
-                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-                    }`}
-                  >
-                    My Profile
-                  </Link>
+                  <NavLink to="/my-profile">My Profile</NavLink>
                 )}
-              </>
-            )}
 
-            {/* Admin Panel for admins */}
-            {(user?.role === "SUPER_ADMIN" || user?.role === "FIELD_ADMIN") && (
-              <>
-                <Link
-                  to="/admin"
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                    isActive("/admin")
-                      ? "bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg"
-                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-                  }`}
-                >
+                <NavLink to="/admin">
                   {user?.role === "FIELD_ADMIN" ? "Manage" : "Dashboard"}
-                </Link>
+                </NavLink>
 
-                <Link
-                  to="/reports"
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                    isActive("/reports")
-                      ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg"
-                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-                  }`}
-                >
-                  Reports
-                </Link>
+                <NavLink to="/reports">Reports</NavLink>
 
                 {user?.role === "SUPER_ADMIN" && (
-                  <Link
-                    to="/admin/field-admins"
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                      isActive("/admin/field-admins")
-                        ? "bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-lg"
-                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-                    }`}
-                  >
-                    Admins
-                  </Link>
+                  <NavLink to="/admin/field-admins">Admins</NavLink>
                 )}
               </>
             )}
           </div>
 
-          {/* Enhanced Right side actions */}
-          <div className="flex items-center space-x-4">
-            {/* Enhanced Submit Data for unverified users */}
+          {/* Right side actions */}
+          <div className="flex items-center space-x-6">
             {user?.role === "UNVERIFIED" && (
               <Link
                 to="/submit"
-                className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-2 rounded-xl text-sm font-medium hover:from-blue-700 hover:to-blue-800 transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                className="bg-secondary hover:bg-secondary-dark text-white px-6 py-2 rounded-md text-sm font-medium transition-colors duration-200 shadow-sm"
               >
                 Submit Data
               </Link>
             )}
 
-            {/* Enhanced User menu */}
-            <div className="flex items-center space-x-3">
-              <div className="text-right hidden sm:block">
-                <div className="text-sm font-semibold text-gray-900">
+            {/* User menu */}
+            <div className="flex items-center space-x-4">
+              <div className="text-right hidden sm:block border-r border-gray-600 pr-4">
+                <div className="text-sm font-bold text-white font-headings">
                   {user?.full_name || user?.email}
                 </div>
-                <div className="text-xs text-gray-500 capitalize font-medium">
+                <div className="text-xs text-gray-300 capitalize">
                   {user?.role === "FIELD_ADMIN" && user?.assigned_field
                     ? `${user.assigned_field} Admin`
                     : user?.role?.toLowerCase().replace("_", " ")}

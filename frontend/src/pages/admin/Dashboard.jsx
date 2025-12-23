@@ -89,66 +89,21 @@ const AdminDashboard = () => {
   const getStatusBadge = (status) => {
     const statusConfig = {
       PENDING: {
-        gradient: "from-yellow-400 to-orange-500",
-        bgColor: "bg-gradient-to-r from-yellow-50 to-orange-50",
+        bgColor: "bg-yellow-100",
         textColor: "text-yellow-800",
-        icon: (
-          <svg
-            className="w-3 h-3"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-        ),
+        borderColor: "border-yellow-200",
         label: "Pending",
       },
       APPROVED: {
-        gradient: "from-green-400 to-emerald-500",
-        bgColor: "bg-gradient-to-r from-green-50 to-emerald-50",
+        bgColor: "bg-green-100",
         textColor: "text-green-800",
-        icon: (
-          <svg
-            className="w-3 h-3"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M5 13l4 4L19 7"
-            />
-          </svg>
-        ),
+        borderColor: "border-green-200",
         label: "Approved",
       },
       REJECTED: {
-        gradient: "from-red-400 to-pink-500",
-        bgColor: "bg-gradient-to-r from-red-50 to-pink-50",
+        bgColor: "bg-red-100",
         textColor: "text-red-800",
-        icon: (
-          <svg
-            className="w-3 h-3"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        ),
+        borderColor: "border-red-200",
         label: "Rejected",
       },
     };
@@ -156,32 +111,22 @@ const AdminDashboard = () => {
     const config = statusConfig[status];
 
     return (
-      <div
-        className={`inline-flex items-center px-3 py-1 rounded-full ${config.bgColor} border border-white/50 shadow-sm backdrop-blur-sm`}
+      <span
+        className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide border ${config.bgColor} ${config.textColor} ${config.borderColor}`}
       >
-        <div
-          className={`w-1.5 h-1.5 rounded-full bg-gradient-to-r ${config.gradient} mr-2`}
-        ></div>
-        <span
-          className={`text-xs font-semibold ${config.textColor} flex items-center`}
-        >
-          {config.icon}
-          <span className="ml-1">{config.label}</span>
-        </span>
-      </div>
+        {config.label}
+      </span>
     );
   };
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 flex items-center justify-center">
-        <div className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 p-8">
-          <div className="flex items-center space-x-4">
-            <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-            <span className="text-lg font-semibold text-gray-700">
-              Loading dashboard...
-            </span>
-          </div>
+      <div className="min-h-screen bg-surface flex items-center justify-center">
+        <div className="flex items-center space-x-4">
+          <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+          <span className="text-lg font-bold text-gray-700">
+            Loading dashboard...
+          </span>
         </div>
       </div>
     );
@@ -189,13 +134,11 @@ const AdminDashboard = () => {
 
   if (user?.role !== "SUPER_ADMIN" && user?.role !== "FIELD_ADMIN") {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 flex items-center justify-center">
-        <div className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 p-12 text-center relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-500 to-pink-500"></div>
-
-          <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-pink-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+      <div className="min-h-screen bg-surface flex items-center justify-center p-4">
+        <div className="bg-white rounded-lg shadow-md border border-gray-200 p-12 text-center max-w-md w-full">
+          <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <svg
-              className="w-8 h-8 text-white"
+              className="w-8 h-8 text-red-600"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -209,10 +152,10 @@ const AdminDashboard = () => {
             </svg>
           </div>
 
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-red-600 to-pink-700 bg-clip-text text-transparent mb-3">
+          <h1 className="text-2xl font-headings font-bold text-red-700 mb-3">
             Access Denied
           </h1>
-          <p className="text-gray-600 text-lg">
+          <p className="text-text-muted text-lg">
             Administrator access required to view this page
           </p>
         </div>
@@ -221,341 +164,198 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Enhanced Header */}
-        <div className="mb-8">
-          <div className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20 p-8 relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500"></div>
-            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/10 to-indigo-500/10 rounded-bl-full"></div>
-
-            <div className="relative z-10">
-              <div className="flex items-center mb-4">
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg mr-6">
-                  <svg
-                    className="w-8 h-8 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                    />
-                  </svg>
-                </div>
-                <div>
-                  <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 via-blue-800 to-indigo-800 bg-clip-text text-transparent">
-                    {user?.role === "FIELD_ADMIN"
-                      ? `${user?.assigned_field} Engineering Administration`
-                      : "Alumni Management Dashboard"}
-                  </h1>
-                  <p className="text-gray-600 text-lg mt-2">
-                    {user?.role === "FIELD_ADMIN"
-                      ? "Review and approve alumni submissions for your field"
-                      : "Manage alumni submissions across all engineering fields"}
-                  </p>
-                </div>
-              </div>
+    <div className="min-h-screen bg-surface py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="bg-white shadow-sm border border-gray-200 rounded-lg p-8 mb-8">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+            <div>
+              <h1 className="text-3xl font-headings font-bold text-primary">
+                {user?.role === "FIELD_ADMIN"
+                  ? `${user?.assigned_field} Engineering Administration`
+                  : "Alumni Management Dashboard"}
+              </h1>
+              <p className="text-text-muted mt-2 text-lg">
+                {user?.role === "FIELD_ADMIN"
+                  ? "Review and approve alumni submissions for your field"
+                  : "Manage alumni submissions across all engineering fields"}
+              </p>
             </div>
           </div>
         </div>
 
-        {/* Enhanced Stats Overview */}
+        {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20 overflow-hidden group hover:shadow-2xl transition-all duration-300">
-            <div className="p-6 relative">
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 to-orange-500"></div>
-              <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-200">
-                    <svg
-                      className="w-6 h-6 text-white"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                  </div>
-                </div>
-                <div className="ml-5 w-0 flex-1">
-                  <dl>
-                    <dt className="text-sm font-semibold text-gray-600 truncate">
-                      Pending Review
-                    </dt>
-                    <dd className="text-2xl font-bold bg-gradient-to-r from-yellow-600 to-orange-600 bg-clip-text text-transparent">
-                      {pendingSubmissions.length}
-                    </dd>
-                  </dl>
-                </div>
+          <div className="bg-white shadow-sm border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow duration-200 border-l-4 border-l-yellow-400">
+            <div className="flex items-center">
+              <div className="flex-shrink-0 bg-yellow-50 p-3 rounded-md">
+                <svg
+                  className="w-6 h-6 text-yellow-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div className="ml-5 w-0 flex-1">
+                <dl>
+                  <dt className="text-sm font-bold text-gray-500 uppercase tracking-wide truncate">
+                    Pending Review
+                  </dt>
+                  <dd className="text-2xl font-bold text-primary mt-1">
+                    {pendingSubmissions.length}
+                  </dd>
+                </dl>
               </div>
             </div>
           </div>
 
-          <div className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20 overflow-hidden group hover:shadow-2xl transition-all duration-300">
-            <div className="p-6 relative">
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-indigo-500"></div>
-              <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-200">
-                    <svg
-                      className="w-6 h-6 text-white"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                      />
-                    </svg>
-                  </div>
-                </div>
-                <div className="ml-5 w-0 flex-1">
-                  <dl>
-                    <dt className="text-sm font-semibold text-gray-600 truncate">
-                      Total Submissions
-                    </dt>
-                    <dd className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                      {allSubmissions.length}
-                    </dd>
-                  </dl>
-                </div>
+          <div className="bg-white shadow-sm border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow duration-200 border-l-4 border-l-blue-400">
+            <div className="flex items-center">
+              <div className="flex-shrink-0 bg-blue-50 p-3 rounded-md">
+                <svg
+                  className="w-6 h-6 text-blue-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              </div>
+              <div className="ml-5 w-0 flex-1">
+                <dl>
+                  <dt className="text-sm font-bold text-gray-500 uppercase tracking-wide truncate">
+                    Total Submissions
+                  </dt>
+                  <dd className="text-2xl font-bold text-primary mt-1">
+                    {allSubmissions.length}
+                  </dd>
+                </dl>
               </div>
             </div>
           </div>
 
-          <div className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20 overflow-hidden group hover:shadow-2xl transition-all duration-300">
-            <div className="p-6 relative">
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-400 to-emerald-500"></div>
-              <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-emerald-500 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-200">
-                    <svg
-                      className="w-6 h-6 text-white"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                  </div>
-                </div>
-                <div className="ml-5 w-0 flex-1">
-                  <dl>
-                    <dt className="text-sm font-semibold text-gray-600 truncate">
-                      Approved
-                    </dt>
-                    <dd className="text-2xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
-                      {
-                        allSubmissions.filter((s) => s.status === "APPROVED")
-                          .length
-                      }
-                    </dd>
-                  </dl>
-                </div>
+          <div className="bg-white shadow-sm border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow duration-200 border-l-4 border-l-green-400">
+            <div className="flex items-center">
+              <div className="flex-shrink-0 bg-green-50 p-3 rounded-md">
+                <svg
+                  className="w-6 h-6 text-green-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <div className="ml-5 w-0 flex-1">
+                <dl>
+                  <dt className="text-sm font-bold text-gray-500 uppercase tracking-wide truncate">
+                    Approved
+                  </dt>
+                  <dd className="text-2xl font-bold text-primary mt-1">
+                    {allSubmissions.filter((s) => s.status === "APPROVED").length}
+                  </dd>
+                </dl>
               </div>
             </div>
           </div>
 
-          <div className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20 overflow-hidden group hover:shadow-2xl transition-all duration-300">
-            <div className="p-6 relative">
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-400 to-pink-500"></div>
-              <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <div className="w-12 h-12 bg-gradient-to-br from-red-400 to-pink-500 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-200">
-                    <svg
-                      className="w-6 h-6 text-white"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
-                  </div>
-                </div>
-                <div className="ml-5 w-0 flex-1">
-                  <dl>
-                    <dt className="text-sm font-semibold text-gray-600 truncate">
-                      Rejected
-                    </dt>
-                    <dd className="text-2xl font-bold bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
-                      {
-                        allSubmissions.filter((s) => s.status === "REJECTED")
-                          .length
-                      }
-                    </dd>
-                  </dl>
-                </div>
+          <div className="bg-white shadow-sm border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow duration-200 border-l-4 border-l-red-400">
+            <div className="flex items-center">
+              <div className="flex-shrink-0 bg-red-50 p-3 rounded-md">
+                <svg
+                  className="w-6 h-6 text-red-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </div>
+              <div className="ml-5 w-0 flex-1">
+                <dl>
+                  <dt className="text-sm font-bold text-gray-500 uppercase tracking-wide truncate">
+                    Rejected
+                  </dt>
+                  <dd className="text-2xl font-bold text-primary mt-1">
+                    {allSubmissions.filter((s) => s.status === "REJECTED").length}
+                  </dd>
+                </dl>
               </div>
             </div>
           </div>
         </div>
 
         {/* Main Content */}
-        <div>
-          {/* Enhanced Pending Submissions */}
-          <div>
-            <div className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20 overflow-hidden">
-              <div className="px-8 py-6 border-b border-gray-100 bg-gradient-to-r from-blue-50 to-indigo-50 relative">
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-indigo-500"></div>
-                <div className="flex items-center">
-                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-md mr-4">
-                    <svg
-                      className="w-5 h-5 text-white"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                  </div>
-                  <h3 className="text-lg font-semibold bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent">
-                    Pending Review ({pendingSubmissions.length})
-                  </h3>
-                </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Pending Submissions */}
+          <div className="lg:col-span-2">
+            <div className="bg-white shadow-sm border border-gray-200 rounded-lg overflow-hidden h-full">
+              <div className="px-6 py-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
+                <h3 className="text-lg font-headings font-bold text-primary">
+                  Pending Review <span className="text-secondary ml-2">({pendingSubmissions.length})</span>
+                </h3>
               </div>
 
               {pendingSubmissions.length === 0 ? (
-                <div className="p-12 text-center">
-                  <div className="w-20 h-20 bg-gradient-to-br from-green-400 to-emerald-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-                    <svg
-                      className="w-10 h-10 text-white"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                  </div>
-                  <h3 className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent mb-2">
-                    All caught up!
-                  </h3>
-                  <p className="text-gray-600">
-                    No pending submissions to review at the moment.
-                  </p>
+                <div className="p-12 text-center text-gray-500">
+                  <svg className="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <h3 className="text-xl font-bold text-gray-700 mb-2">All caught up!</h3>
+                  <p className="text-text-muted">No pending submissions to review at the moment.</p>
                 </div>
               ) : (
-                <div className="max-h-96 overflow-y-auto">
-                  {pendingSubmissions.map((submission, index) => (
+                <div className="divide-y divide-gray-100 max-h-[600px] overflow-y-auto">
+                  {pendingSubmissions.map((submission) => (
                     <div
                       key={submission.id}
-                      className={`p-6 hover:bg-blue-50/50 transition-colors duration-200 ${
-                        index !== pendingSubmissions.length - 1
-                          ? "border-b border-gray-100"
-                          : ""
-                      }`}
+                      className="p-6 hover:bg-gray-50 transition-colors duration-200"
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="flex items-center mb-2">
-                            <div className="w-3 h-3 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full mr-3 shadow-sm"></div>
-                            <h4 className="text-base font-semibold text-gray-900">
+                            <span className="w-2 h-2 rounded-full bg-yellow-500 mr-2"></span>
+                            <h4 className="text-base font-bold text-primary">
                               {submission.full_name}
                             </h4>
                           </div>
-                          <p className="text-sm text-gray-700 mb-1">
-                            <span className="font-medium">
+                          <p className="text-sm text-gray-700 mb-2">
+                            <span className="font-bold text-secondary">
                               {submission.calling_name}
                             </span>{" "}
                             •
-                            <span className="text-blue-600 font-medium ml-1">
+                            <span className="ml-1 text-gray-500">
                               {submission.field}
                             </span>
                           </p>
-                          <p className="text-xs text-gray-500 flex items-center">
-                            <svg
-                              className="w-3 h-3 mr-1"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                              />
-                            </svg>
-                            {submission.email} •
-                            <svg
-                              className="w-3 h-3 ml-2 mr-1"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                              />
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                              />
-                            </svg>
-                            {submission.country}
-                          </p>
+                          <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
+                            <span className="flex items-center">
+                               <svg className="w-4 h-4 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                               </svg>
+                               {submission.email}
+                            </span>
+                             <span className="flex items-center">
+                               <svg className="w-4 h-4 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                               </svg>
+                               {submission.country}
+                            </span>
+                          </div>
                         </div>
                         <button
                           onClick={() => {
                             setSelectedSubmission(submission);
                             setIsModalOpen(true);
                           }}
-                          className="ml-4 inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-sm font-semibold rounded-xl hover:from-blue-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transform hover:scale-105 transition-all duration-200 shadow-lg"
+                          className="ml-4 flex-shrink-0 inline-flex items-center px-4 py-2 bg-secondary hover:bg-secondary-dark text-white text-sm font-bold rounded-md uppercase tracking-wide transition-colors duration-200 shadow-sm"
                         >
-                          <svg
-                            className="w-4 h-4 mr-2"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                            />
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                            />
-                          </svg>
+                           <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                           </svg>
                           Review
                         </button>
                       </div>
@@ -566,68 +366,41 @@ const AdminDashboard = () => {
             </div>
           </div>
 
-          {/* Enhanced Quick Stats */}
-          <div className="space-y-6">
-            <div className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20 overflow-hidden">
-              <div className="p-6 border-b border-gray-100 bg-gradient-to-r from-purple-50 to-pink-50 relative">
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-pink-500"></div>
-                <div className="flex items-center">
-                  <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center shadow-md mr-4">
-                    <svg
-                      className="w-5 h-5 text-white"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M13 10V3L4 14h7v7l9-11h-7z"
-                      />
-                    </svg>
-                  </div>
-                  <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-700 to-pink-700 bg-clip-text text-transparent">
-                    Recent Activity
-                  </h3>
-                </div>
-              </div>
-
-              <div className="p-6">
-                <div className="space-y-4">
-                  {allSubmissions.slice(0, 5).map((submission) => (
+          {/* Recent Activity */}
+          <div className="lg:col-span-1">
+            <div className="bg-white shadow-sm border border-gray-200 rounded-lg overflow-hidden h-full">
+               <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
+                 <h3 className="text-lg font-headings font-bold text-primary">
+                  Recent Activity
+                </h3>
+               </div>
+              <div className="p-4">
+                 <div className="space-y-4">
+                  {allSubmissions.slice(0, 8).map((submission) => (
                     <div
                       key={submission.id}
-                      className="flex items-center p-3 rounded-xl hover:bg-gray-50 transition-colors duration-200 group"
+                      className="flex items-center p-3 rounded-md hover:bg-gray-50 transition-colors duration-200 border border-transparent hover:border-gray-200"
                     >
-                      <div
-                        className={`w-3 h-3 rounded-full mr-4 shadow-sm ${
+                       <div
+                        className={`w-2 h-2 rounded-full mr-3 ${
                           submission.status === "APPROVED"
-                            ? "bg-gradient-to-r from-green-400 to-emerald-500"
+                            ? "bg-green-500"
                             : submission.status === "REJECTED"
-                            ? "bg-gradient-to-r from-red-400 to-pink-500"
-                            : "bg-gradient-to-r from-yellow-400 to-orange-500"
+                            ? "bg-red-500"
+                            : "bg-yellow-500"
                         }`}
                       />
                       <div className="flex-1 min-w-0">
-                        <span className="text-sm font-medium text-gray-900 truncate block group-hover:text-blue-600 transition-colors duration-200">
+                        <p className="text-sm font-bold text-gray-900 truncate">
                           {submission.full_name}
-                        </span>
-                        <span className="text-xs text-gray-500">
+                        </p>
+                        <p className="text-xs text-gray-500 truncate">
                           {submission.field}
-                        </span>
+                        </p>
                       </div>
-                      <span
-                        className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold shadow-sm ${
-                          submission.status === "APPROVED"
-                            ? "bg-gradient-to-r from-green-50 to-emerald-50 text-green-800 border border-green-200"
-                            : submission.status === "REJECTED"
-                            ? "bg-gradient-to-r from-red-50 to-pink-50 text-red-800 border border-red-200"
-                            : "bg-gradient-to-r from-yellow-50 to-orange-50 text-yellow-800 border border-yellow-200"
-                        }`}
-                      >
-                        {submission.status.toLowerCase()}
-                      </span>
+                      <div>
+                        {getStatusBadge(submission.status)}
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -636,241 +409,123 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        {/* Modal for submission review */}
+        {/* Improved Modal */}
         {isModalOpen && selectedSubmission && (
-          <div className="fixed inset-0 z-50 overflow-y-auto">
-            <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+          <div className="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+            <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
               <div
-                className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+                className="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity"
+                aria-hidden="true"
                 onClick={() => setIsModalOpen(false)}
               ></div>
 
-              <span className="hidden sm:inline-block sm:align-middle sm:h-screen">
+              <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">
                 &#8203;
               </span>
 
-              <div className="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
-                <div className="bg-gradient-to-r from-indigo-50 to-blue-50 px-6 py-4 border-b border-gray-200">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-xl flex items-center justify-center shadow-md mr-4">
-                        <svg
-                          className="w-5 h-5 text-white"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-                          />
-                        </svg>
-                      </div>
-                      <h3 className="text-lg font-semibold bg-gradient-to-r from-indigo-700 to-blue-700 bg-clip-text text-transparent">
-                        Review Submission
-                      </h3>
-                    </div>
-                    <button
-                      onClick={() => setIsModalOpen(false)}
-                      className="text-gray-400 hover:text-gray-600 p-2 rounded-lg hover:bg-gray-100 transition-colors"
-                    >
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M6 18L18 6M6 6l12 12"
-                        />
-                      </svg>
-                    </button>
-                  </div>
+              <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full border border-gray-200">
+                <div className="bg-white px-6 py-5 border-b border-gray-200 flex justify-between items-center">
+                  <h3 className="text-lg font-headings font-bold text-primary" id="modal-title">
+                    Review Submission
+                  </h3>
+                  <button
+                    onClick={() => setIsModalOpen(false)}
+                    className="text-gray-400 hover:text-gray-600 transition-colors"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
                 </div>
 
-                <div className="p-6 max-h-96 overflow-y-auto">
-                  <div className="space-y-4">
-                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-xl border border-blue-100">
-                      <h4 className="text-sm font-semibold text-blue-800 mb-2 flex items-center">
-                        <svg
-                          className="w-4 h-4 mr-2"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                          />
-                        </svg>
-                        Applicant Details
-                      </h4>
-                      <p className="font-semibold text-gray-900 text-lg">
-                        {selectedSubmission.full_name}
-                      </p>
-                      <p className="text-sm text-gray-600 mt-1">
-                        {selectedSubmission.user_email}
-                      </p>
+                <div className="p-6 max-h-[70vh] overflow-y-auto">
+                  <div className="space-y-6">
+                    {/* Applicant Info */}
+                    <div className="bg-gray-50 p-4 rounded-md border border-gray-200">
+                      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-2">
+                        <div>
+                          <h4 className="text-sm font-bold text-secondary uppercase tracking-wider mb-1">Applicant</h4>
+                          <p className="text-xl font-bold text-gray-900">{selectedSubmission.full_name}</p>
+                        </div>
+                        <div className="mt-2 md:mt-0">
+                          {getStatusBadge(selectedSubmission.status)}
+                        </div>
+                      </div>
+                       <p className="text-sm text-gray-500">{selectedSubmission.user_email}</p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="bg-gradient-to-r from-emerald-50 to-green-50 p-4 rounded-xl border border-emerald-100">
-                        <h4 className="text-sm font-semibold text-emerald-800 mb-2 flex items-center">
-                          <svg
-                            className="w-4 h-4 mr-2"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-                            />
-                          </svg>
-                          Engineering Field
-                        </h4>
-                        <p className="font-semibold text-gray-900">
-                          {selectedSubmission.field}
-                        </p>
+                    {/* Details Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                      <div className="p-3 border border-gray-200 rounded-md">
+                        <span className="block text-xs font-bold text-gray-500 uppercase mb-1">Field</span>
+                        <span className="font-bold text-gray-900">{selectedSubmission.field}</span>
                       </div>
-
-                      <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-xl border border-purple-100">
-                        <h4 className="text-sm font-semibold text-purple-800 mb-2 flex items-center">
-                          <svg
-                            className="w-4 h-4 mr-2"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                            />
-                          </svg>
-                          Contact
-                        </h4>
-                        <p className="font-medium text-gray-900 text-sm">
-                          {selectedSubmission.whatsapp_mobile}
-                        </p>
-                        <p className="text-sm text-gray-600">
-                          {selectedSubmission.email}
-                        </p>
+                      <div className="p-3 border border-gray-200 rounded-md">
+                        <span className="block text-xs font-bold text-gray-500 uppercase mb-1">Calling Name</span>
+                        <span className="font-medium text-gray-900">{selectedSubmission.calling_name}</span>
                       </div>
-
-                      <div className="bg-gradient-to-r from-amber-50 to-yellow-50 p-4 rounded-xl border border-amber-100">
-                        <h4 className="text-sm font-semibold text-amber-800 mb-2 flex items-center">
-                          <svg
-                            className="w-4 h-4 mr-2"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                            />
-                          </svg>
-                          Submitted
-                        </h4>
-                        <p className="text-sm text-gray-700">
-                          {new Date(
-                            selectedSubmission.created_at
-                          ).toLocaleDateString()}
-                        </p>
+                      <div className="p-3 border border-gray-200 rounded-md">
+                        <span className="block text-xs font-bold text-gray-500 uppercase mb-1">Contact</span>
+                        <span className="font-medium text-gray-900 block">{selectedSubmission.whatsapp_mobile}</span>
+                        <span className="text-gray-500 text-xs">{selectedSubmission.email}</span>
                       </div>
-
-                      <div className="bg-gradient-to-r from-cyan-50 to-blue-50 p-4 rounded-xl border border-cyan-100">
-                        <h4 className="text-sm font-semibold text-cyan-800 mb-2 flex items-center">
-                          <svg
-                            className="w-4 h-4 mr-2"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                            />
-                          </svg>
-                          Location
-                        </h4>
-                        <p className="text-sm text-gray-700">
-                          {selectedSubmission.country}
-                        </p>
+                      <div className="p-3 border border-gray-200 rounded-md">
+                        <span className="block text-xs font-bold text-gray-500 uppercase mb-1">Submitted Date</span>
+                        <span className="font-medium text-gray-900">
+                           {new Date(selectedSubmission.created_at).toLocaleDateString()}
+                        </span>
+                      </div>
+                      <div className="p-3 border border-gray-200 rounded-md md:col-span-2">
+                         <span className="block text-xs font-bold text-gray-500 uppercase mb-1">Location / Country</span>
+                         <span className="font-medium text-gray-900">{selectedSubmission.country}</span>
                       </div>
                     </div>
 
-                    <div className="mt-4">
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Rejection Reason (Optional)
+                    {/* Rejection Reason Input */}
+                    <div>
+                      <label className="block text-sm font-bold text-gray-700 uppercase tracking-wide mb-2">
+                        Rejection Reason <span className="text-gray-400 font-normal lowercase">(Optional, only if rejecting)</span>
                       </label>
                       <textarea
                         value={rejectReason}
                         onChange={(e) => setRejectReason(e.target.value)}
                         placeholder="Please provide a reason for rejection..."
-                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 resize-none text-sm"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-secondary focus:border-transparent transition-shadow resize-none bg-gray-50 text-sm"
                         rows={3}
                       />
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-gray-50 px-6 py-4 flex flex-col sm:flex-row sm:justify-end gap-3">
+                <div className="bg-gray-50 px-6 py-4 border-t border-gray-200 flex flex-col sm:flex-row sm:justify-end gap-3">
                   <button
                     onClick={() => setIsModalOpen(false)}
-                    className="w-full sm:w-auto px-6 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
+                    className="w-full sm:w-auto px-6 py-2 border border-gray-300 text-gray-700 font-bold rounded-md hover:bg-gray-100 transition-colors uppercase tracking-wider text-sm"
                   >
                     Cancel
                   </button>
-                  <button
-                    onClick={() => {
-                      handleReject(selectedSubmission.id);
-                      setIsModalOpen(false);
-                    }}
-                    disabled={approveLoading || rejectLoading}
-                    className="w-full sm:w-auto bg-gradient-to-r from-red-500 to-pink-600 text-white px-6 py-2 rounded-lg hover:from-red-600 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-medium text-sm"
-                  >
-                    {rejectLoading ? (
-                      <div className="flex items-center justify-center">
-                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                        Rejecting...
-                      </div>
-                    ) : (
-                      "Reject"
-                    )}
-                  </button>
-                  <button
-                    onClick={() => {
-                      handleApprove(selectedSubmission.id);
-                      setIsModalOpen(false);
-                    }}
-                    disabled={approveLoading || rejectLoading}
-                    className="w-full sm:w-auto bg-gradient-to-r from-green-500 to-emerald-600 text-white px-6 py-2 rounded-lg hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-medium text-sm"
-                  >
-                    {approveLoading ? (
-                      <div className="flex items-center justify-center">
-                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                        Approving...
-                      </div>
-                    ) : (
-                      "Approve"
-                    )}
-                  </button>
+                  <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                    <button
+                      onClick={() => {
+                        handleReject(selectedSubmission.id);
+                        setIsModalOpen(false);
+                      }}
+                      disabled={approveLoading || rejectLoading}
+                      className="w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white font-bold px-6 py-2 rounded-md transition-colors uppercase tracking-wider text-sm shadow-sm disabled:opacity-50"
+                    >
+                      {rejectLoading ? "Rejecting..." : "Reject"}
+                    </button>
+                    <button
+                      onClick={() => {
+                         handleApprove(selectedSubmission.id);
+                         setIsModalOpen(false);
+                      }}
+                      disabled={approveLoading || rejectLoading}
+                      className="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white font-bold px-6 py-2 rounded-md transition-colors uppercase tracking-wider text-sm shadow-sm disabled:opacity-50"
+                    >
+                      {approveLoading ? "Approving..." : "Approve"}
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

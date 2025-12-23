@@ -175,7 +175,7 @@ export default function Reports() {
         body: tableData,
         startY: 55,
         styles: { fontSize: 8 },
-        headStyles: { fillColor: [59, 130, 246] },
+        headStyles: { fillColor: [15, 43, 76] }, // Primary color
         alternateRowStyles: { fillColor: [248, 250, 252] },
       });
 
@@ -222,43 +222,43 @@ export default function Reports() {
   const isAllFieldsSelected = selectedFields.length === fieldOptions.length;
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
-      <div className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20 p-8">
+    <div className="max-w-7xl mx-auto p-6 min-h-screen bg-surface">
+      <div className="bg-white shadow-sm border border-gray-200 rounded-lg p-8">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        <div className="mb-8 border-b border-gray-200 pb-6">
+          <h1 className="text-3xl font-headings font-bold text-primary">
             Alumni Reports
           </h1>
-          <p className="text-gray-600 mt-2">
+          <p className="text-text-muted mt-2 text-lg">
             Generate detailed reports with field and country filtering
           </p>
         </div>
 
         {/* Report Configuration */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           {/* Field Selection */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-bold text-gray-700 uppercase tracking-wider mb-2">
               Engineering Fields
             </label>
             {user?.role === "FIELD_ADMIN" ? (
-              <div className="px-3 py-2 bg-gray-100 rounded-lg border">
-                <span className="text-gray-800">{user.assigned_field}</span>
+              <div className="px-3 py-2 bg-gray-100 rounded-md border border-gray-200">
+                <span className="text-gray-800 font-bold">{user.assigned_field}</span>
                 <span className="text-xs text-gray-500 ml-2">
                   (Your assigned field)
                 </span>
               </div>
             ) : (
-              <div className="max-h-48 overflow-y-auto border border-gray-300 rounded-lg p-2">
+              <div className="max-h-48 overflow-y-auto border border-gray-300 rounded-md p-2 bg-gray-50">
                 {/* All Fields Checkbox */}
-                <label className="flex items-center space-x-2 p-1 border-b border-gray-200 pb-2 mb-2">
+                <label className="flex items-center space-x-2 p-1 border-b border-gray-200 pb-2 mb-2 hover:bg-gray-100 rounded">
                   <input
                     type="checkbox"
                     checked={isAllFieldsSelected}
                     onChange={(e) => handleAllFieldsChange(e.target.checked)}
-                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    className="rounded border-gray-300 text-secondary focus:ring-secondary"
                   />
-                  <span className="text-sm text-gray-700 font-medium">
+                  <span className="text-sm text-gray-800 font-bold">
                     All Fields
                   </span>
                 </label>
@@ -266,7 +266,7 @@ export default function Reports() {
                 {fieldOptions.map((field) => (
                   <label
                     key={field}
-                    className="flex items-center space-x-2 p-1"
+                    className="flex items-center space-x-2 p-1 hover:bg-gray-100 rounded"
                   >
                     <input
                       type="checkbox"
@@ -274,7 +274,7 @@ export default function Reports() {
                       onChange={(e) =>
                         handleFieldChange(field, e.target.checked)
                       }
-                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      className="rounded border-gray-300 text-secondary focus:ring-secondary"
                     />
                     <span className="text-sm text-gray-700">{field}</span>
                   </label>
@@ -285,13 +285,13 @@ export default function Reports() {
 
           {/* Country Filter */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-bold text-gray-700 uppercase tracking-wider mb-2">
               Country (Residence)
             </label>
             <select
               value={selectedCountry}
               onChange={(e) => setSelectedCountry(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-secondary focus:border-transparent transition-shadow"
             >
               <option value="">All Countries</option>
               {allCountries.map((country) => (
@@ -304,14 +304,14 @@ export default function Reports() {
         </div>
 
         {/* Generate Report Button */}
-        <div className="mb-8">
+        <div className="mb-8 border-b border-gray-200 pb-8">
           <button
             onClick={generateReport}
             disabled={
               loading ||
               (user?.role === "SUPER_ADMIN" && selectedFields.length === 0)
             }
-            className="px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold rounded-xl hover:from-blue-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg"
+            className="px-8 py-3 bg-secondary hover:bg-secondary-dark text-white font-bold rounded-md uppercase tracking-wider transition-colors duration-200 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? (
               <span className="flex items-center">
@@ -325,8 +325,8 @@ export default function Reports() {
         </div>
 
         {error && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-            <p className="text-red-800">{error}</p>
+          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-md">
+            <p className="text-red-800 font-bold">{error}</p>
           </div>
         )}
 
@@ -334,28 +334,28 @@ export default function Reports() {
         {reportData && (
           <div className="space-y-6">
             {/* Report Summary */}
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl border border-blue-200">
-              <h3 className="text-lg font-semibold text-blue-800 mb-4">
+            <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
+              <h3 className="text-lg font-bold text-primary mb-4 uppercase tracking-wider">
                 Report Summary
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
-                  <span className="text-sm text-blue-600">Total Alumni:</span>
-                  <p className="text-2xl font-bold text-blue-800">
+                  <span className="text-sm font-bold text-gray-500 uppercase">Total Alumni</span>
+                  <p className="text-3xl font-bold text-secondary font-headings">
                     {reportData.totalCount}
                   </p>
                 </div>
                 <div>
-                  <span className="text-sm text-blue-600">Fields:</span>
-                  <p className="font-medium text-blue-800">
+                  <span className="text-sm font-bold text-gray-500 uppercase">Fields</span>
+                  <p className="font-medium text-gray-800">
                     {reportData.filters.fields.length > 0
                       ? reportData.filters.fields.join(", ")
                       : "All Fields"}
                   </p>
                 </div>
                 <div>
-                  <span className="text-sm text-blue-600">Country:</span>
-                  <p className="font-medium text-blue-800">
+                  <span className="text-sm font-bold text-gray-500 uppercase">Country</span>
+                  <p className="font-medium text-gray-800">
                     {reportData.filters.country || "All Countries"}
                   </p>
                 </div>
@@ -366,7 +366,7 @@ export default function Reports() {
             <div className="flex space-x-4">
               <button
                 onClick={exportToExcel}
-                className="px-6 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white font-medium rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-200 shadow-lg flex items-center space-x-2"
+                className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white font-bold rounded-md shadow-sm flex items-center space-x-2 transition-colors duration-200"
               >
                 <svg
                   className="w-4 h-4"
@@ -380,7 +380,7 @@ export default function Reports() {
 
               <button
                 onClick={exportToPDF}
-                className="px-6 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white font-medium rounded-lg hover:from-red-600 hover:to-red-700 transition-all duration-200 shadow-lg flex items-center space-x-2"
+                className="px-6 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-md shadow-sm flex items-center space-x-2 transition-colors duration-200"
               >
                 <svg
                   className="w-4 h-4"
@@ -398,40 +398,40 @@ export default function Reports() {
             </div>
 
             {/* Report Data Table */}
-            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-              <div className="px-6 py-4 border-b border-gray-200">
-                <h4 className="text-lg font-medium text-gray-900">
+            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm">
+              <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
+                <h4 className="text-lg font-bold text-gray-800 uppercase tracking-wider">
                   Alumni Data
                 </h4>
               </div>
 
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
+                  <thead className="bg-gray-100">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
                         Name
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
                         Field
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
                         Country
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
                         Email
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
                         Working Place
                       </th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
                     {reportData.alumni.map((alum, index) => (
-                      <tr key={alum.id || index} className="hover:bg-gray-50">
+                      <tr key={alum.id || index} className="hover:bg-gray-50 transition-colors">
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div>
-                            <div className="text-sm font-medium text-gray-900">
+                            <div className="text-sm font-bold text-gray-900">
                               {alum.full_name}
                             </div>
                             <div className="text-sm text-gray-500">

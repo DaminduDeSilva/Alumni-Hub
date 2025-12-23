@@ -2,27 +2,28 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom animations for login page */
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0px) rotate(0deg);
-    opacity: 0.2;
+@layer base {
+  body {
+    @apply font-body text-text-main bg-surface antialiased;
   }
-  25% {
-    transform: translateY(-10px) rotate(90deg);
-    opacity: 0.4;
-  }
-  50% {
-    transform: translateY(-20px) rotate(180deg);
-    opacity: 0.6;
-  }
-  75% {
-    transform: translateY(-10px) rotate(270deg);
-    opacity: 0.4;
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-headings font-bold text-primary;
   }
 }
 
-.animate-float {
-  animation: float linear infinite;
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-primary-light rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-primary;
 }

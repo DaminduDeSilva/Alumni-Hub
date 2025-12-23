@@ -31,9 +31,9 @@ const MySubmissions = () => {
   const getStatusBadge = (status) => {
     const statusConfig = {
       PENDING: {
-        gradient: "from-yellow-400 to-orange-500",
-        bgColor: "bg-gradient-to-r from-yellow-50 to-orange-50",
+        bgColor: "bg-yellow-50",
         textColor: "text-yellow-800",
+        borderColor: "border-yellow-200",
         icon: (
           <svg
             className="w-3 h-3"
@@ -52,9 +52,9 @@ const MySubmissions = () => {
         label: "Pending Review",
       },
       APPROVED: {
-        gradient: "from-green-400 to-emerald-500",
-        bgColor: "bg-gradient-to-r from-green-50 to-emerald-50",
+        bgColor: "bg-green-50",
         textColor: "text-green-800",
+        borderColor: "border-green-200",
         icon: (
           <svg
             className="w-3 h-3"
@@ -73,9 +73,9 @@ const MySubmissions = () => {
         label: "Approved",
       },
       REJECTED: {
-        gradient: "from-red-400 to-pink-500",
-        bgColor: "bg-gradient-to-r from-red-50 to-pink-50",
+        bgColor: "bg-red-50",
         textColor: "text-red-800",
+        borderColor: "border-red-200",
         icon: (
           <svg
             className="w-3 h-3"
@@ -99,16 +99,13 @@ const MySubmissions = () => {
 
     return (
       <div
-        className={`inline-flex items-center px-4 py-2 rounded-full ${config.bgColor} border border-white/50 shadow-lg backdrop-blur-sm`}
+        className={`inline-flex items-center px-3 py-1 rounded-full ${config.bgColor} border ${config.borderColor}`}
       >
-        <div
-          className={`w-2 h-2 rounded-full bg-gradient-to-r ${config.gradient} mr-2 animate-pulse`}
-        ></div>
         <span
-          className={`text-sm font-semibold ${config.textColor} flex items-center`}
+          className={`text-sm font-bold uppercase tracking-wide ${config.textColor} flex items-center`}
         >
           {config.icon}
-          <span className="ml-1">{config.label}</span>
+          <span className="ml-2">{config.label}</span>
         </span>
       </div>
     );
@@ -126,32 +123,26 @@ const MySubmissions = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 flex items-center justify-center">
-        <div className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 p-8">
-          <div className="flex items-center space-x-4">
-            <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-            <span className="text-lg font-semibold text-gray-700">
-              Loading submissions...
-            </span>
-          </div>
+      <div className="min-h-screen bg-surface flex items-center justify-center">
+        <div className="flex items-center space-x-4">
+          <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+          <span className="text-lg font-bold text-gray-700">
+            Loading submissions...
+          </span>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-surface py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        {/* Enhanced Header */}
-        <div className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20 p-8 mb-8 relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500"></div>
-          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/10 to-indigo-500/10 rounded-bl-full"></div>
-
-          <div className="relative z-10">
-            <div className="flex items-center mb-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg mr-4">
-                <svg
-                  className="w-6 h-6 text-white"
+        {/* Header */}
+        <div className="bg-white shadow-sm border border-gray-200 rounded-lg p-8 mb-8">
+          <div className="flex items-center mb-4">
+            <div className="w-12 h-12 bg-primary text-white rounded-lg flex items-center justify-center shadow-md mr-4">
+               <svg
+                  className="w-6 h-6"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -163,84 +154,77 @@ const MySubmissions = () => {
                     d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                   />
                 </svg>
-              </div>
-              <div>
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 via-blue-800 to-indigo-800 bg-clip-text text-transparent">
-                  My Submissions
-                </h1>
-                <p className="text-gray-600 text-lg mt-1">
-                  Track the status of your alumni data submissions
-                </p>
-              </div>
+            </div>
+            <div>
+              <h1 className="text-3xl font-headings font-bold text-primary">
+                My Submissions
+              </h1>
+              <p className="text-text-muted text-lg mt-1">
+                Track the status of your alumni data submissions
+              </p>
             </div>
           </div>
         </div>
 
         {submissions.length === 0 ? (
-          <div className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20 p-12 text-center relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-gray-500/5 to-blue-500/5 rounded-bl-3xl"></div>
-
-            <div className="relative z-10">
-              <div className="w-20 h-20 bg-gradient-to-br from-gray-400 to-gray-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-                <svg
-                  className="w-10 h-10 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={1.5}
-                    d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z"
-                  />
-                </svg>
-              </div>
-              <h3 className="text-2xl font-bold bg-gradient-to-r from-gray-600 to-gray-800 bg-clip-text text-transparent mb-3">
-                No submissions yet
-              </h3>
-              <p className="text-gray-600 text-lg mb-8">
-                You haven't submitted any alumni data yet.
-              </p>
-              <Link
-                to="/submit"
-                className="group inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300"
+          <div className="bg-white shadow-sm border border-gray-200 rounded-lg p-12 text-center">
+            <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <svg
+                className="w-10 h-10 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
               >
-                <svg
-                  className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-200"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M12 4v16m8-8H4"
-                  />
-                </svg>
-                Submit Your Data
-              </Link>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.5}
+                  d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z"
+                />
+              </svg>
             </div>
+            <h3 className="text-2xl font-bold text-primary font-headings mb-3">
+              No submissions yet
+            </h3>
+            <p className="text-text-muted text-lg mb-8">
+              You haven't submitted any alumni data yet.
+            </p>
+            <Link
+              to="/submit"
+              className="inline-flex items-center px-8 py-3 bg-secondary text-white font-bold rounded-md hover:bg-secondary-dark transition-colors duration-200 uppercase tracking-wider"
+            >
+              <svg
+                className="w-5 h-5 mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+              Submit Your Data
+            </Link>
           </div>
         ) : (
           <div className="space-y-8">
             {submissions.map((submission) => (
               <div
                 key={submission.id}
-                className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20 overflow-hidden hover:shadow-2xl transition-all duration-300 group"
+                className="bg-white shadow-sm border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow duration-300"
               >
-                <div className="relative p-8">
-                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 group-hover:h-2 transition-all duration-300"></div>
-
-                  <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-8">
+                <div className="p-8">
+                  <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-8 border-b border-gray-100 pb-6">
                     <div className="flex-1">
-                      <h3 className="text-xl font-bold bg-gradient-to-r from-gray-900 to-blue-800 bg-clip-text text-transparent mb-2">
+                      <h3 className="text-xl font-bold text-primary font-headings mb-2">
                         {submission.full_name} ({submission.calling_name})
                       </h3>
-                      <div className="flex items-center text-gray-600 text-sm">
+                      <div className="flex items-center text-gray-600 text-sm font-medium">
                         <svg
-                          className="w-4 h-4 mr-2"
+                          className="w-4 h-4 mr-2 text-secondary"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -258,7 +242,7 @@ const MySubmissions = () => {
                     <div className="flex items-center gap-6">
                       {getStatusBadge(submission.status)}
                       <div className="text-right">
-                        <p className="text-sm font-medium text-gray-700">
+                        <p className="text-sm font-bold text-gray-700 uppercase">
                           Submitted
                         </p>
                         <p className="text-sm text-gray-500">
@@ -270,11 +254,11 @@ const MySubmissions = () => {
 
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
                     {/* Contact Information */}
-                    <div className="bg-gradient-to-br from-blue-50/50 to-indigo-50/50 rounded-xl p-6 border border-blue-100/50">
-                      <div className="flex items-center mb-4">
-                        <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center mr-3">
+                    <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                      <div className="flex items-center mb-4 border-b border-gray-200 pb-2">
+                        <div className="w-8 h-8 bg-blue-100 text-blue-800 rounded-md flex items-center justify-center mr-3">
                           <svg
-                            className="w-4 h-4 text-white"
+                            className="w-4 h-4"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -287,46 +271,41 @@ const MySubmissions = () => {
                             />
                           </svg>
                         </div>
-                        <h4 className="text-lg font-semibold text-gray-800">
+                        <h4 className="text-sm font-bold text-primary uppercase tracking-wider">
                           Contact Information
                         </h4>
                       </div>
                       <div className="space-y-3">
                         <div className="flex items-center">
-                          <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
                           <span className="text-gray-800 font-medium">
                             {submission.whatsapp_mobile}
                           </span>
-                          <span className="ml-2 px-2 py-1 text-xs bg-green-100 text-green-700 rounded-full">
+                          <span className="ml-2 px-2 py-0.5 text-xs bg-green-100 text-green-800 border border-green-200 rounded font-bold uppercase">
                             WhatsApp
                           </span>
                         </div>
                         {submission.phone_mobile && (
                           <div className="flex items-center">
-                            <span className="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
                             <span className="text-gray-800 font-medium">
                               {submission.phone_mobile}
                             </span>
-                            <span className="ml-2 px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded-full">
+                            <span className="ml-2 px-2 py-0.5 text-xs bg-blue-100 text-blue-800 border border-blue-200 rounded font-bold uppercase">
                               Phone
                             </span>
                           </div>
                         )}
-                        <div className="flex items-center">
-                          <span className="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
-                          <span className="text-gray-800 font-medium">
-                            {submission.email}
-                          </span>
+                        <div className="flex items-center text-gray-800">
+                           {submission.email}
                         </div>
                       </div>
                     </div>
 
                     {/* Location Information */}
-                    <div className="bg-gradient-to-br from-purple-50/50 to-pink-50/50 rounded-xl p-6 border border-purple-100/50">
-                      <div className="flex items-center mb-4">
-                        <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-600 rounded-lg flex items-center justify-center mr-3">
+                    <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                      <div className="flex items-center mb-4 border-b border-gray-200 pb-2">
+                        <div className="w-8 h-8 bg-purple-100 text-purple-800 rounded-md flex items-center justify-center mr-3">
                           <svg
-                            className="w-4 h-4 text-white"
+                            className="w-4 h-4"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -345,24 +324,21 @@ const MySubmissions = () => {
                             />
                           </svg>
                         </div>
-                        <h4 className="text-lg font-semibold text-gray-800">
+                        <h4 className="text-sm font-bold text-primary uppercase tracking-wider">
                           Location
                         </h4>
                       </div>
-                      <div className="space-y-3">
+                      <div className="space-y-3 font-medium text-gray-800">
                         {submission.address && (
-                          <p className="text-gray-800 flex items-start">
-                            <span className="w-2 h-2 bg-indigo-500 rounded-full mr-3 mt-2 flex-shrink-0"></span>
+                          <p className="flex items-start">
                             {submission.address}
                           </p>
                         )}
-                        <p className="text-gray-800 flex items-center">
-                          <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                        <p className="flex items-center font-bold">
                           {submission.country}
                         </p>
                         {submission.working_place && (
-                          <p className="text-gray-800 flex items-start">
-                            <span className="w-2 h-2 bg-orange-500 rounded-full mr-3 mt-2 flex-shrink-0"></span>
+                          <p className="flex items-start">
                             <span>
                               <strong>Works at:</strong>{" "}
                               {submission.working_place}
@@ -377,53 +353,36 @@ const MySubmissions = () => {
                   {(submission.university_photo_url ||
                     submission.current_photo_url) && (
                     <div className="mb-8">
-                      <h4 className="text-lg font-semibold text-gray-800 mb-6 flex items-center">
-                        <svg
-                          className="w-5 h-5 mr-2"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                          />
-                        </svg>
+                      <h4 className="text-sm font-bold text-primary uppercase tracking-wider mb-4 border-b border-gray-200 pb-2">
                         Photos
                       </h4>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {submission.university_photo_url && (
                           <div className="group/photo">
-                            <h5 className="text-sm font-medium text-gray-700 mb-3 flex items-center">
-                              <span className="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
+                            <h5 className="text-xs font-bold text-gray-500 uppercase mb-2">
                               University Photo
                             </h5>
-                            <div className="relative overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+                            <div className="relative overflow-hidden rounded-md shadow border border-gray-200">
                               <img
                                 src={submission.university_photo_url}
                                 alt="University"
-                                className="w-full h-56 object-cover group-hover/photo:scale-105 transition-transform duration-300"
+                                className="w-full h-56 object-cover"
                               />
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover/photo:opacity-100 transition-opacity duration-300"></div>
                             </div>
                           </div>
                         )}
 
                         {submission.current_photo_url && (
                           <div className="group/photo">
-                            <h5 className="text-sm font-medium text-gray-700 mb-3 flex items-center">
-                              <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                            <h5 className="text-xs font-bold text-gray-500 uppercase mb-2">
                               Current Photo
                             </h5>
-                            <div className="relative overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+                            <div className="relative overflow-hidden rounded-md shadow border border-gray-200">
                               <img
                                 src={submission.current_photo_url}
                                 alt="Current"
-                                className="w-full h-56 object-cover group-hover/photo:scale-105 transition-transform duration-300"
+                                className="w-full h-56 object-cover"
                               />
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover/photo:opacity-100 transition-opacity duration-300"></div>
                             </div>
                           </div>
                         )}
@@ -433,28 +392,16 @@ const MySubmissions = () => {
 
                   {/* Enhanced Status Messages */}
                   {submission.status === "PENDING" && (
-                    <div className="bg-gradient-to-r from-yellow-50 to-orange-50 border-l-4 border-yellow-400 rounded-xl p-6 shadow-sm">
+                    <div className="bg-yellow-50 border-l-4 border-yellow-400 p-6 rounded-r-md">
                       <div className="flex items-center mb-2">
-                        <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center mr-3">
-                          <svg
-                            className="w-4 h-4 text-white animate-spin"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                            />
-                          </svg>
+                        <div className="w-8 h-8 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center mr-3">
+                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         </div>
-                        <h5 className="text-lg font-semibold text-yellow-800">
+                        <h5 className="text-lg font-bold text-yellow-800">
                           Under Review
                         </h5>
                       </div>
-                      <p className="text-yellow-700 leading-relaxed">
+                      <p className="text-yellow-700 leading-relaxed font-medium">
                         Your submission is currently being reviewed by the
                         committee. You will be notified once it's approved.
                       </p>
@@ -462,64 +409,40 @@ const MySubmissions = () => {
                   )}
 
                   {submission.status === "APPROVED" && (
-                    <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-l-4 border-green-400 rounded-xl p-6 shadow-sm">
+                    <div className="bg-green-50 border-l-4 border-green-400 p-6 rounded-r-md">
                       <div className="flex items-center mb-2">
-                        <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center mr-3">
-                          <svg
-                            className="w-4 h-4 text-white"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M5 13l4 4L19 7"
-                            />
-                          </svg>
+                        <div className="w-8 h-8 bg-green-100 text-green-600 rounded-full flex items-center justify-center mr-3">
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
                         </div>
-                        <h5 className="text-lg font-semibold text-green-800">
+                        <h5 className="text-lg font-bold text-green-800">
                           Approved!
                         </h5>
                       </div>
-                      <p className="text-green-700 leading-relaxed mb-2">
+                      <p className="text-green-700 leading-relaxed mb-2 font-medium">
                         Your submission has been approved! You now have access
                         to the alumni directory.
                       </p>
-                      <p className="text-green-600 text-sm">
+                      <p className="text-green-600 text-sm font-bold">
                         Approved on: {formatDate(submission.reviewed_at)}
                       </p>
                     </div>
                   )}
 
                   {submission.status === "REJECTED" && (
-                    <div className="bg-gradient-to-r from-red-50 to-pink-50 border-l-4 border-red-400 rounded-xl p-6 shadow-sm">
+                    <div className="bg-red-50 border-l-4 border-red-400 p-6 rounded-r-md">
                       <div className="flex items-center mb-3">
-                        <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center mr-3">
-                          <svg
-                            className="w-4 h-4 text-white"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M6 18L18 6M6 6l12 12"
-                            />
-                          </svg>
-                        </div>
-                        <h5 className="text-lg font-semibold text-red-800">
+                         <div className="w-8 h-8 bg-red-100 text-red-600 rounded-full flex items-center justify-center mr-3">
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                         </div>
+                        <h5 className="text-lg font-bold text-red-800">
                           Submission Rejected
                         </h5>
                       </div>
                       <div className="space-y-3">
-                        <p className="text-red-700 leading-relaxed">
+                        <p className="text-red-700 leading-relaxed font-medium">
                           Your submission was rejected.
                           {submission.rejection_reason && (
-                            <span className="block mt-2 font-medium">
+                            <span className="block mt-2">
                               <strong>Reason:</strong>{" "}
                               {submission.rejection_reason}
                             </span>
@@ -531,21 +454,8 @@ const MySubmissions = () => {
                         </p>
                         <Link
                           to="/submit"
-                          className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white font-medium rounded-lg hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300 group"
+                          className="inline-flex items-center px-6 py-2 bg-red-600 text-white font-bold rounded-md hover:bg-red-700 uppercase tracking-wider text-sm"
                         >
-                          <svg
-                            className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform duration-200"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M12 4v16m8-8H4"
-                            />
-                          </svg>
                           Submit New Application
                         </Link>
                       </div>
@@ -557,20 +467,20 @@ const MySubmissions = () => {
           </div>
         )}
 
-        {/* Enhanced Action Button */}
+        {/* Action Button */}
         {submissions.length > 0 &&
           submissions.every((s) => s.status !== "PENDING") && (
             <div className="mt-12 text-center">
-              <div className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20 p-8 inline-block">
-                <h3 className="text-lg font-semibold text-gray-800 mb-4">
+              <div className="bg-white shadow-sm border border-gray-200 rounded-lg p-8 inline-block">
+                <h3 className="text-lg font-bold text-primary mb-4">
                   Ready for another submission?
                 </h3>
                 <Link
                   to="/submit"
-                  className="group inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300"
+                  className="inline-flex items-center px-8 py-3 bg-secondary text-white font-bold rounded-md hover:bg-secondary-dark transition-colors duration-200 uppercase tracking-wider"
                 >
                   <svg
-                    className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-200"
+                    className="w-5 h-5 mr-2"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
