@@ -135,6 +135,7 @@ router.post("/login", async (req, res) => {
         assigned_field: user.assigned_field,
         is_verified: user.is_verified,
         verification_status: user.verification_status,
+        created_at: user.created_at,
       },
     });
   } catch (error) {
@@ -176,7 +177,7 @@ router.get("/me", async (req, res) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     const result = await pool.query(
-      "SELECT id, email, role, full_name, assigned_field, is_verified, verification_status FROM users WHERE id = $1",
+      "SELECT id, email, role, full_name, assigned_field, is_verified, verification_status, created_at FROM users WHERE id = $1",
       [decoded.id]
     );
 
