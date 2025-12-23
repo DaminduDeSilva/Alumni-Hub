@@ -579,14 +579,7 @@ export default function Directory() {
                         {selectedAlumni.field || "N/A"}
                       </p>
                     </div>
-                    <div>
-                      <label className="block text-xs font-bold text-gray-500 uppercase">
-                        Registration Number
-                      </label>
-                      <p className="text-gray-900">
-                        {selectedAlumni.reg_no || "N/A"}
-                      </p>
-                    </div>
+
                   </div>
                 </div>
 

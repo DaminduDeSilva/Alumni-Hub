@@ -273,14 +273,7 @@ export default function MyProfile() {
                     </p>
                   </div>
 
-                  <div className="p-4 rounded-lg border border-gray-200 bg-gray-50 hover:border-secondary transition-colors duration-200">
-                    <h3 className="text-xs font-bold text-gray-500 uppercase mb-1">
-                      Registration Number
-                    </h3>
-                    <p className="text-gray-900 font-medium font-body">
-                      {batchmate.reg_no || "-"}
-                    </p>
-                  </div>
+
 
                   <div className="p-4 rounded-lg border border-gray-200 bg-gray-50 hover:border-secondary transition-colors duration-200">
                     <h3 className="text-xs font-bold text-gray-500 uppercase mb-1">
