@@ -189,7 +189,6 @@ const EditProfile = () => {
                     <span className="block font-bold text-gray-700 uppercase mb-1">Email</span>
                     <span className="text-gray-900 font-medium">{profileData.email}</span>
                   </div>
-                  </div>
                   <div>
                     <span className="block font-bold text-gray-700 uppercase mb-1">Field</span>
                     <span className="text-gray-900 font-medium">{profileData.field}</span>
