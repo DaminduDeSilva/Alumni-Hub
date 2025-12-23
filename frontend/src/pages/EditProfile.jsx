@@ -14,6 +14,7 @@ const EditProfile = () => {
     country: "",
     workingPlace: "",
     phoneMobile: "",
+    whatsappMobile: "",
     nickName: "",
   });
 
@@ -63,6 +64,7 @@ const EditProfile = () => {
           country: data.country || "",
           workingPlace: data.working_place || "",
           phoneMobile: data.phone_mobile || "",
+          whatsappMobile: data.whatsapp_mobile || "",
           nickName: data.nick_name || "",
         });
       } else {
@@ -160,7 +162,7 @@ const EditProfile = () => {
           <div className="text-center">
             <h1 className="text-3xl font-headings font-bold text-primary">Edit Profile</h1>
             <p className="text-text-muted text-lg mt-1">
-              Update your information (limited fields for data integrity)
+              Update your information below
             </p>
           </div>
         </div>
@@ -187,13 +189,10 @@ const EditProfile = () => {
                     <span className="block font-bold text-gray-700 uppercase mb-1">Email</span>
                     <span className="text-gray-900 font-medium">{profileData.email}</span>
                   </div>
+                  </div>
                   <div>
                     <span className="block font-bold text-gray-700 uppercase mb-1">Field</span>
                     <span className="text-gray-900 font-medium">{profileData.field}</span>
-                  </div>
-                  <div>
-                    <span className="block font-bold text-gray-700 uppercase mb-1">WhatsApp</span>
-                    <span className="text-gray-900 font-medium">{profileData.whatsapp_mobile}</span>
                   </div>
                 </div>
               </div>
@@ -277,6 +276,19 @@ const EditProfile = () => {
                       onChange={handleInputChange}
                       className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-shadow"
                       placeholder="Phone number"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-2">
+                      WhatsApp Number
+                    </label>
+                    <input
+                      type="tel"
+                      name="whatsappMobile"
+                      value={formData.whatsappMobile}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-shadow"
+                      placeholder="WhatsApp number"
                     />
                   </div>
                 </div>
@@ -418,18 +430,6 @@ const EditProfile = () => {
             </form>
           </div>
         </div>
-
-           {/* Info Box */}
-            <div className="bg-blue-50 border-l-4 border-blue-400 p-4 mt-6 rounded-r-md shadow-sm">
-              <div className="flex">
-                <div className="ml-3">
-                  <p className="text-sm text-blue-800 font-medium">
-                    <strong>Note:</strong> For data integrity, email, calling name, and field cannot be changed. 
-                    Contact administrators if these need correction.
-                  </p>
-                </div>
-              </div>
-            </div>
       </div>
     </div>
   );

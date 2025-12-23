@@ -91,7 +91,7 @@ router.put(
   ]),
   async (req, res) => {
     try {
-      const { address, country, workingPlace, phoneMobile, nickName } =
+      const { address, country, workingPlace, phoneMobile, nickName, whatsappMobile } =
         req.body;
 
       // Get current batchmate data
@@ -164,6 +164,12 @@ router.put(
         paramCount++;
         updates.push(`nick_name = $${paramCount}`);
         params.push(nickName);
+      }
+
+      if (whatsappMobile !== undefined) {
+        paramCount++;
+        updates.push(`whatsapp_mobile = $${paramCount}`);
+        params.push(whatsappMobile);
       }
 
       if (universityPhotoUrl !== null) {
