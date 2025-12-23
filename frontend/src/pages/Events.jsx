@@ -368,14 +368,17 @@ const Events = () => {
 
                     {(isSuperAdmin || isAdmin) && (
                       <div className="mt-4 flex space-x-2">
-                        <button
-                          onClick={() =>
-                            navigate(`/events/${event.id}/attendance`)
-                          }
-                          className="flex-1 bg-purple-600 hover:bg-purple-700 text-white py-2 rounded-md"
-                        >
-                          Mark Attendance
-                        </button>
+                        {new Date(event.event_date).toDateString() ===
+                          new Date().toDateString() && (
+                          <button
+                            onClick={() =>
+                              navigate(`/events/${event.id}/attendance`)
+                            }
+                            className="flex-1 bg-purple-600 hover:bg-purple-700 text-white py-2 rounded-md"
+                          >
+                            Mark Attendance
+                          </button>
+                        )}
                         {isSuperAdmin && (
                           <button
                             onClick={() =>
