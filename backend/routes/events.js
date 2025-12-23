@@ -17,6 +17,7 @@ const {
   getUserEvents,
   cancelRegistration,
 } = require("../controllers/events");
+const { upload } = require("../utils/fileUpload");
 
 // Public routes (accessible to VERIFIED_USERS and FIELD_ADMINS)
 router.get("/", authenticateToken, requireVerified, getEvents);
@@ -39,8 +40,8 @@ router.post(
 );
 
 // SUPER_ADMIN only routes
-router.post("/", authenticateToken, isSuperAdmin, createEvent);
-router.put("/:id", authenticateToken, isSuperAdmin, updateEvent);
+router.post("/", authenticateToken, isSuperAdmin, upload.single("image"), createEvent);
+router.put("/:id", authenticateToken, isSuperAdmin, upload.single("image"), updateEvent);
 router.delete("/:id", authenticateToken, isSuperAdmin, deleteEvent);
 
 // Attendance marking (SUPER_ADMIN and FIELD_ADMINS)

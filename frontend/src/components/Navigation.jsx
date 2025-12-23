@@ -8,6 +8,7 @@ const Navigation = () => {
   const { user, isAuthenticated } = useAuth();
   const location = useLocation();
   const [pendingCount, setPendingCount] = useState(0);
+  const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
   const [hasUnreadApproval, setHasUnreadApproval] = useState(false);
   const notificationRef = useRef(null);
@@ -30,37 +31,23 @@ const Navigation = () => {
     };
   }, []);
 
-  // Fetch Admin Pending Count
+  // Fetch Notifications
   useEffect(() => {
-    if (
-      isAuthenticated &&
-      (user?.role === "SUPER_ADMIN" || user?.role === "FIELD_ADMIN")
-    ) {
-      const fetchPending = async () => {
+    if (isAuthenticated) {
+      const fetchNotifications = async () => {
         try {
-          const res = await api.get("/admin/submissions/pending");
-          setPendingCount(res.data.submissions.length);
+          const res = await api.get("/notifications");
+          setNotifications(res.data.notifications);
         } catch (err) {
-          console.error("Failed to fetch pending count", err);
+          console.error("Failed to fetch notifications", err);
         }
       };
 
-      fetchPending();
-      // Poll every minute for updates
-      const interval = setInterval(fetchPending, 60000);
+      fetchNotifications();
+      const interval = setInterval(fetchNotifications, 30000); // 30 seconds
       return () => clearInterval(interval);
     }
-  }, [user, isAuthenticated]);
-
-  // Check User Verification Notification
-  useEffect(() => {
-    if (isAuthenticated && user?.role === "VERIFIED_USER") {
-      const seen = localStorage.getItem("hasSeenApproval");
-      if (!seen) {
-        setHasUnreadApproval(true);
-      }
-    }
-  }, [user, isAuthenticated]);
+  }, [isAuthenticated]);
 
   // Early return MUST be after all hooks
   if (!isAuthenticated) {
@@ -82,18 +69,27 @@ const Navigation = () => {
 
   const handleNotificationClick = () => {
     setShowNotifications(!showNotifications);
+  };
 
-    // Mark user approval as read when opening notifications
-    if (hasUnreadApproval && !showNotifications) {
-      localStorage.setItem("hasSeenApproval", "true");
-      setHasUnreadApproval(false);
+  const handleMarkAllRead = async () => {
+    try {
+      await api.put("/notifications/mark-all-read");
+      setNotifications(notifications.map(n => ({ ...n, is_read: true })));
+    } catch (err) {
+      console.error("Failed to mark notifications as read", err);
     }
   };
 
-  const notificationCount =
-    (user?.role === "SUPER_ADMIN" || user?.role === "FIELD_ADMIN"
-      ? pendingCount
-      : 0) + (hasUnreadApproval ? 1 : 0);
+  const handleMarkAsRead = async (id) => {
+    try {
+      await api.put(`/notifications/${id}/read`);
+      setNotifications(notifications.map(n => n.id === id ? { ...n, is_read: true } : n));
+    } catch (err) {
+      console.error("Failed to mark notification as read", err);
+    }
+  };
+
+  const notificationCount = notifications.filter(n => !n.is_read).length;
 
   return (
     <nav className="bg-primary shadow-md sticky top-0 z-50 border-b border-primary-dark">
@@ -195,51 +191,56 @@ const Navigation = () => {
 
                 {showNotifications && (
                   <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl py-2 z-50 border border-gray-200">
-                    <div className="px-4 py-2 border-b border-gray-100">
+                    <div className="px-4 py-2 border-b border-gray-100 flex justify-between items-center">
                       <h3 className="text-sm font-bold text-gray-700 uppercase tracking-wider">
                         Notifications
                       </h3>
+                      {notifications.some(n => !n.is_read) && (
+                        <button 
+                          onClick={handleMarkAllRead}
+                          className="text-xs text-secondary hover:text-secondary-dark font-semibold"
+                        >
+                          Mark all as read
+                        </button>
+                      )}
                     </div>
 
-                    <div className="max-h-64 overflow-y-auto">
-                      {(user?.role === "SUPER_ADMIN" ||
-                        user?.role === "FIELD_ADMIN") && (
-                        <>
-                          {pendingCount > 0 ? (
-                            <Link
-                              to="/admin"
-                              className="block px-4 py-3 hover:bg-gray-50 transition-colors border-l-4 border-secondary"
-                              onClick={() => setShowNotifications(false)}
-                            >
-                              <p className="text-sm font-bold text-primary">
-                                Pending Reviews
+                    <div className="max-h-80 overflow-y-auto">
+                      {notifications.length > 0 ? (
+                        notifications.map((notif) => (
+                          <Link
+                            key={notif.id}
+                            to={notif.link || "#"}
+                            onClick={() => {
+                              handleMarkAsRead(notif.id);
+                              setShowNotifications(false);
+                            }}
+                            className={`block px-4 py-3 hover:bg-gray-50 transition-colors border-l-4 ${
+                              notif.is_read ? "border-transparent" : "border-secondary bg-blue-50/30"
+                            }`}
+                          >
+                            <div className="flex justify-between items-start">
+                              <p className={`text-sm ${notif.is_read ? "text-gray-600" : "font-bold text-primary"}`}>
+                                {notif.title}
                               </p>
-                              <p className="text-xs text-gray-500 mt-1">
-                                You have{" "}
-                                <span className="font-bold text-secondary">
-                                  {pendingCount}
-                                </span>{" "}
-                                submission{pendingCount !== 1 && "s"} waiting
-                                for approval.
-                              </p>
-                            </Link>
-                          ) : (
-                            <div className="px-4 py-4 text-center text-gray-500">
-                              <p className="text-sm">No pending submissions.</p>
+                              {!notif.is_read && (
+                                <span className="w-2 h-2 bg-secondary rounded-full"></span>
+                              )}
                             </div>
-                          )}
-                        </>
-                      )}
-
-                      {user?.role === "VERIFIED_USER" && (
-                        <div className="px-4 py-3 border-l-4 border-green-500 bg-green-50">
-                          <p className="text-sm font-bold text-green-800">
-                            Account Verified
-                          </p>
-                          <p className="text-xs text-green-600 mt-1">
-                            Congratulations! Your profile has been approved and
-                            you are now a verified member.
-                          </p>
+                            <p className="text-xs text-gray-500 mt-1 line-clamp-2">
+                              {notif.message}
+                            </p>
+                            <p className="text-[10px] text-gray-400 mt-1">
+                              {new Date(notif.created_at).toLocaleString()}
+                            </p>
+                          </Link>
+                        ))
+                      ) : (
+                        <div className="px-4 py-8 text-center text-gray-500">
+                          <svg className="w-10 h-10 text-gray-200 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                          </svg>
+                          <p className="text-sm">No notifications yet</p>
                         </div>
                       )}
                     </div>

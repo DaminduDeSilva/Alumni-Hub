@@ -224,6 +224,19 @@ router.put(
         ]
       );
 
+      // Create notification for user
+      await pool.query(
+        `INSERT INTO notifications (user_id, type, title, message, link)
+         VALUES ($1, $2, $3, $4, $5)`,
+        [
+          submission.user_id,
+          "account_approval",
+          "Account Verified",
+          "Congratulations! Your profile has been approved and you are now a verified member.",
+          "/my-profile",
+        ]
+      );
+
       await pool.query("COMMIT");
 
       res.json({
@@ -289,6 +302,25 @@ router.put(
         return res
           .status(404)
           .json({ error: "Submission not found or already processed" });
+      }
+
+      const rejectedSubmission = result.rows[0];
+
+      // Create notification for user
+      try {
+        await pool.query(
+          `INSERT INTO notifications (user_id, type, title, message, link)
+           VALUES ($1, $2, $3, $4, $5)`,
+          [
+            rejectedSubmission.user_id,
+            "account_rejection",
+            "Submission Rejected",
+            `Your submission was rejected. Reason: ${reason || "No reason provided."}`,
+            "/submit",
+          ]
+        );
+      } catch (notifErr) {
+        console.error("Error creating rejection notification:", notifErr);
       }
 
       res.json({

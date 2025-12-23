@@ -1,4 +1,5 @@
 const { pool } = require("../config/database");
+const { uploadFile } = require("../utils/fileUpload");
 
 // Create a new event (SUPER_ADMIN only)
 const createEvent = async (req, res) => {
@@ -19,9 +20,18 @@ const createEvent = async (req, res) => {
         .json({ error: "Title and event date are required" });
     }
 
+    // Handle image upload if provided
+    let image_url = null;
+    if (req.file) {
+      const uploadResult = await uploadFile(req.file, "events");
+      if (uploadResult.success) {
+        image_url = uploadResult.url;
+      }
+    }
+
     const query = `
-      INSERT INTO events (title, description, event_date, event_time, location, max_attendees, created_by)
-      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      INSERT INTO events (title, description, event_date, event_time, location, max_attendees, created_by, image_url)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
       RETURNING *
     `;
 
@@ -33,12 +43,42 @@ const createEvent = async (req, res) => {
       location,
       max_attendees,
       req.user.id,
+      image_url,
     ];
 
     const result = await pool.query(query, values);
+    const event = result.rows[0];
+
+    // Create notifications for all verified users
+    try {
+      const verifiedUsers = await pool.query(
+        "SELECT id FROM users WHERE is_verified = true AND id != $1",
+        [req.user.id]
+      );
+
+      if (verifiedUsers.rows.length > 0) {
+        const notificationPromises = verifiedUsers.rows.map((user) => {
+          return pool.query(
+            `INSERT INTO notifications (user_id, type, title, message, link)
+             VALUES ($1, $2, $3, $4, $5)`,
+            [
+              user.id,
+              "event_created",
+              "New Event Scheduled",
+              `A new event "${title}" has been scheduled for ${event_date}.`,
+              "/events",
+            ]
+          );
+        });
+        await Promise.all(notificationPromises);
+      }
+    } catch (notifError) {
+      console.error("Error creating notifications for event:", notifError);
+    }
+
     res.status(201).json({
       success: true,
-      event: result.rows[0],
+      event: event,
     });
   } catch (error) {
     console.error("Error creating event:", error);
@@ -129,11 +169,20 @@ const updateEvent = async (req, res) => {
       return res.status(404).json({ error: "Event not found" });
     }
 
+    // Handle new image upload if provided
+    let image_url = existingEvent.rows[0].image_url;
+    if (req.file) {
+      const uploadResult = await uploadFile(req.file, "events");
+      if (uploadResult.success) {
+        image_url = uploadResult.url;
+      }
+    }
+
     const query = `
       UPDATE events 
       SET title = $1, description = $2, event_date = $3, event_time = $4, 
-          location = $5, max_attendees = $6, updated_at = CURRENT_TIMESTAMP
-      WHERE id = $7
+          location = $5, max_attendees = $6, image_url = $7, updated_at = CURRENT_TIMESTAMP
+      WHERE id = $8
       RETURNING *
     `;
 
@@ -144,6 +193,7 @@ const updateEvent = async (req, res) => {
       event_time,
       location,
       max_attendees,
+      image_url,
       id,
     ];
 

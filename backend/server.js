@@ -17,6 +17,7 @@ const batchmateRoutes = require("./routes/batchmates");
 const profileRoutes = require("./routes/profile");
 const fieldAdminRoutes = require("./routes/fieldAdmins");
 const eventsRoutes = require("./routes/events");
+const notificationRoutes = require("./routes/notifications");
 const { authenticateToken } = require("./middleware/auth");
 
 const app = express();
@@ -63,6 +64,7 @@ app.use("/api/batchmates", batchmateRoutes);
 app.use("/api/user", profileRoutes);
 app.use("/api/field-admins", fieldAdminRoutes);
 app.use("/api/events", eventsRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 // Database inspection routes (for debugging)
 const {
@@ -93,6 +95,7 @@ app.get("/", (req, res) => {
       profile: "/api/user",
       fieldAdmins: "/api/field-admins",
       events: "/api/events",
+      notifications: "/api/notifications",
     },
   });
 });
