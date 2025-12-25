@@ -207,27 +207,30 @@ function AppContent() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen bg-surface">
+    <div className="flex flex-col min-h-screen bg-surface">
+      {/* Top Bar - Full Width Corner-to-Corner */}
       {isAuthenticated && (
-        <Sidebar 
-          isOpen={isSidebarOpen} 
-          onClose={() => setIsSidebarOpen(false)} 
-          user={user}
-          isAuthenticated={isAuthenticated}
-        />
+        <Navigation onOpenSidebar={() => setIsSidebarOpen(true)} />
       )}
       
-      <div className={`flex-1 flex flex-col min-w-0 ${isAuthenticated ? "lg:pl-[280px]" : ""}`}>
+      <div className="flex flex-1 relative">
         {isAuthenticated && (
-          <Navigation onOpenSidebar={() => setIsSidebarOpen(true)} />
+          <Sidebar 
+            isOpen={isSidebarOpen} 
+            onClose={() => setIsSidebarOpen(false)} 
+            user={user}
+            isAuthenticated={isAuthenticated}
+          />
         )}
         
-        <main className="flex-1">
-          <AppRoutes />
+        <main className={`flex-1 min-w-0 ${isAuthenticated ? "lg:pl-[280px]" : ""}`}>
+          <div className="p-4 sm:p-6 lg:p-8">
+            <AppRoutes />
+          </div>
         </main>
-        
-        {!isAuthenticated && <Footer />}
       </div>
+      
+      {!isAuthenticated && <Footer />}
     </div>
   );
 }

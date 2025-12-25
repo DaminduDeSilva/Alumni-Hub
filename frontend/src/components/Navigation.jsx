@@ -115,11 +115,11 @@ const Navigation = ({ onOpenSidebar }) => {
   const notificationCount = notifications.filter(n => !n.is_read).length;
 
   return (
-    <header className="h-20 bg-primary border-b border-white/5 sticky top-0 z-50 px-6 sm:px-10">
-      <div className="h-full max-w-7xl mx-auto flex items-center justify-between gap-8">
+    <header className="h-20 bg-primary border-b border-white/5 sticky top-0 z-[100] px-6">
+      <div className="h-full flex items-center justify-between gap-8">
         
-        {/* Mobile Toggle & Search Trigger Area */}
-        <div className="flex items-center gap-4">
+        {/* Left: Branding & Mobile Toggle */}
+        <div className="flex items-center gap-6">
           <button
             onClick={onOpenSidebar}
             className="lg:hidden p-2 text-white/60 hover:text-white hover:bg-white/5 rounded-xl transition-all"
@@ -129,7 +129,18 @@ const Navigation = ({ onOpenSidebar }) => {
             </svg>
           </button>
           
-          <div className="relative hidden md:block" ref={searchRef}>
+          <Link to="/" className="flex items-center space-x-3">
+            <span className="text-2xl filter drop-shadow-lg">🎓</span>
+            <div className="hidden sm:block">
+              <h1 className="text-lg font-headings font-black text-white leading-none tracking-tight">ALUMNI HUB</h1>
+              <p className="text-[9px] font-black text-secondary uppercase tracking-[0.3em]">Platform</p>
+            </div>
+          </Link>
+        </div>
+
+        {/* Center: Search Area */}
+        <div className="flex-1 max-w-xl relative" ref={searchRef}>
+          <div className="relative group">
             <span className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                 <svg className={`h-4 w-4 transition-colors duration-300 ${isSearching ? "text-secondary animate-pulse" : "text-white/30 group-focus-within:text-white"}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -138,52 +149,50 @@ const Navigation = ({ onOpenSidebar }) => {
             <input
                 ref={inputRef}
                 type="text"
-                placeholder="Search..."
+                placeholder="Search platform..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => searchQuery && setShowResults(true)}
-                className="w-48 lg:w-72 pl-11 pr-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs font-bold text-white placeholder-white/30 focus:w-80 lg:focus:w-96 focus:bg-white/10 focus:border-white/20 transition-all outline-none"
+                className="w-full pl-11 pr-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs font-bold text-white placeholder-white/30 focus:bg-white/10 focus:border-white/20 transition-all outline-none"
             />
-            {showResults && (
-                <div className="absolute top-full left-0 mt-3 w-[450px] bg-white rounded-2xl shadow-2xl py-4 z-50 border border-gray-100 overflow-hidden animate-in fade-in slide-in-from-top-2">
-                    <div className="max-h-[350px] overflow-y-auto px-2 scrollbar-hide">
-                        {searchResults.length > 0 ? (
-                            searchResults.map((result) => (
-                                <Link
-                                    key={result.id}
-                                    to={`/directory?search=${result.full_name}`}
-                                    onClick={() => setShowResults(false)}
-                                    className="flex items-center gap-4 p-3 rounded-xl hover:bg-gray-50 transition-all group"
-                                >
-                                    <div className="w-8 h-8 rounded-lg bg-primary/5 flex items-center justify-center text-primary font-black text-[10px] group-hover:bg-secondary group-hover:text-white transition-colors">
-                                        {result.full_name?.[0].toUpperCase()}
-                                    </div>
-                                    <div className="overflow-hidden">
-                                        <p className="text-[12px] font-bold text-primary truncate">{result.full_name}</p>
-                                        <p className="text-[9px] text-gray-400 font-bold uppercase tracking-tight truncate">
-                                            {result.field} • Batch of {result.batch_year || result.batch}
-                                        </p>
-                                    </div>
-                                </Link>
-                            ))
-                        ) : !isSearching && (
-                            <p className="py-8 text-center text-[10px] font-black text-gray-400 uppercase tracking-widest">No results found</p>
-                        )}
-                    </div>
-                </div>
-            )}
+            <div className="absolute right-3 inset-y-0 flex items-center pointer-events-none">
+                <kbd className="hidden sm:inline-flex items-center px-2 py-1 text-[9px] font-bold text-white/20 bg-black/20 rounded-md"> / </kbd>
+            </div>
           </div>
+
+          {showResults && (
+            <div className="absolute top-full left-0 mt-3 w-full bg-white rounded-2xl shadow-2xl py-4 z-50 border border-gray-100 overflow-hidden animate-in fade-in slide-in-from-top-2">
+                <div className="max-h-[350px] overflow-y-auto px-2 scrollbar-hide">
+                    {searchResults.length > 0 ? (
+                        searchResults.map((result) => (
+                            <Link
+                                key={result.id}
+                                to={`/directory?search=${result.full_name}`}
+                                onClick={() => setShowResults(false)}
+                                className="flex items-center gap-4 p-3 rounded-xl hover:bg-gray-50 transition-all group"
+                            >
+                                <div className="w-8 h-8 rounded-lg bg-primary/5 flex items-center justify-center text-primary font-black text-[10px] group-hover:bg-secondary group-hover:text-white transition-colors">
+                                    {result.full_name?.[0].toUpperCase()}
+                                </div>
+                                <div className="overflow-hidden">
+                                    <p className="text-[12px] font-bold text-primary truncate">{result.full_name}</p>
+                                    <p className="text-[9px] text-gray-400 font-bold uppercase tracking-tight truncate">
+                                        {result.field} • Batch of {result.batch_year || result.batch}
+                                    </p>
+                                </div>
+                            </Link>
+                        ))
+                    ) : !isSearching && (
+                        <p className="py-8 text-center text-[10px] font-black text-gray-400 uppercase tracking-widest">No results found</p>
+                    )}
+                </div>
+            </div>
+          )}
         </div>
 
-        {/* Dynamic Greeting (Center) */}
-        <div className="hidden xl:block">
-            <h2 className="text-sm font-headings font-black text-white/90 tracking-tight">
-                {greeting}, <span className="text-secondary">{user?.full_name?.split(' ')[0] || 'User'}</span> 👋
-            </h2>
-        </div>
-
-        {/* User Actions (Right) */}
+        {/* Right: User Actions */}
         <div className="flex items-center gap-6">
+          {/* Notifications area */}
           <div className="relative" ref={notificationRef}>
             <button
               onClick={() => setShowNotifications(!showNotifications)}
@@ -201,7 +210,6 @@ const Navigation = ({ onOpenSidebar }) => {
             
             {showNotifications && (
               <div className="absolute right-0 mt-4 w-80 bg-white rounded-2xl shadow-2xl py-4 z-50 animate-in fade-in zoom-in-95">
-                {/* ... existing notification dropdown content simplified ... */}
                 <div className="px-6 pb-2 border-b border-gray-50 flex justify-between items-center mb-2">
                     <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Updates</h3>
                     <button onClick={handleMarkAllRead} className="text-[10px] font-black text-secondary hover:underline">Clear</button>
@@ -224,22 +232,17 @@ const Navigation = ({ onOpenSidebar }) => {
 
           <div className="h-8 w-px bg-white/10 hidden sm:block" />
 
-          {/* User Profile Info */}
+          {/* User Profile */}
           <div className="flex items-center space-x-4">
             <div className="text-right hidden sm:block">
               <p className="text-xs font-black text-white leading-none mb-1">{user?.full_name}</p>
-              <div className="flex items-center justify-end space-x-1">
-                <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
-                <p className="text-[10px] font-bold text-white/50 uppercase tracking-tighter">
-                    {user?.role?.toLowerCase().replace("_", " ")}
-                </p>
-              </div>
+              <p className="text-[10px] font-bold text-white/40 uppercase tracking-wider">
+                {user?.role?.toLowerCase().replace("_", " ")}
+              </p>
             </div>
             
-            <div className="relative group">
-                <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white text-xs font-black hover:bg-white/10 transition-all cursor-pointer">
-                    {(user?.full_name || user?.email)?.[0].toUpperCase()}
-                </div>
+            <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white text-xs font-black shadow-inner">
+                {(user?.full_name || user?.email)?.[0].toUpperCase()}
             </div>
 
             <LogoutButton className="bg-white/5 text-white/60 border-white/10 hover:bg-red-500/20 hover:text-red-300" />
