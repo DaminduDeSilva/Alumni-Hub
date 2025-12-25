@@ -102,7 +102,7 @@ const Sidebar = ({ isOpen, onClose, user, isAuthenticated }) => {
               <SidebarLink to="/directory">Directory</SidebarLink>
 
               {user?.role === "FIELD_ADMIN" && (
-                <SidebarLink to="/my-profile">My Field</SidebarLink>
+                <SidebarLink to="/my-profile">Profile</SidebarLink>
               )}
 
               <SidebarLink to="/admin">
