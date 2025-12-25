@@ -33,7 +33,7 @@ const Sidebar = ({ isOpen, onClose, user, isAuthenticated }) => {
       />
       
       {/* Sidebar Panel - Starts below Header */}
-      <aside className={`fixed top-20 left-0 h-[calc(100vh-80px)] w-[280px] bg-slate-50 border-r border-slate-200 z-[70] flex flex-col transition-all duration-500 ease-in-out transform shadow-sm ${
+      <aside className={`fixed lg:sticky top-20 left-0 h-[calc(100vh-80px)] w-[280px] bg-slate-50 border-r border-slate-200 z-[70] flex flex-col transition-all duration-500 ease-in-out transform lg:transform-none shadow-sm ${
         isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
       }`}>
         <div className="flex-1 overflow-y-auto px-6 py-8 space-y-1 scrollbar-hide">

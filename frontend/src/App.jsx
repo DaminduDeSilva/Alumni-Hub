@@ -213,7 +213,7 @@ function AppContent() {
         <Navigation onOpenSidebar={() => setIsSidebarOpen(true)} />
       )}
       
-      <div className="flex flex-1 relative">
+      <div className="flex flex-1 flex-row relative">
         {isAuthenticated && (
           <Sidebar 
             isOpen={isSidebarOpen} 
@@ -223,7 +223,7 @@ function AppContent() {
           />
         )}
         
-        <main className={`flex-1 min-w-0 ${isAuthenticated ? "lg:pl-[280px]" : ""}`}>
+        <main className="flex-1 min-w-0">
           <div className="p-4 sm:p-6 lg:p-8">
             <AppRoutes />
           </div>

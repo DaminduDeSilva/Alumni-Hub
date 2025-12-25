@@ -28,16 +28,16 @@ const LogoutButton = ({ fullWidth = false, className = "" }) => {
     <>
       <button
         onClick={handleLogoutClick}
-        className={`flex items-center gap-2.5 px-4 py-2 rounded-xl border transition-all duration-300 group
+        title="Sign Out"
+        className={`flex items-center justify-center w-10 h-10 rounded-xl border transition-all duration-300 group shadow-sm
           ${fullWidth 
-            ? "w-full justify-center bg-white/5 border-white/10 text-white/50 hover:bg-red-500/10 hover:border-red-500/20 hover:text-red-400" 
-            : "bg-white/5 border-white/10 text-white/40 hover:bg-white/10 hover:border-white/20 hover:text-white"
+            ? "w-full bg-white/5 border-white/10 text-white/50 hover:bg-red-500/10 hover:border-red-500/20 hover:text-red-400" 
+            : "bg-white/5 border-white/10 text-white/40 hover:bg-red-500/10 hover:border-red-500/20 hover:text-red-400"
           } ${className}`}
       >
-        <span className="group-hover:translate-x-0.5 transition-transform duration-300">
+        <span className="group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
             <LogOutIcon />
         </span>
-        <span className="text-[10px] font-black uppercase tracking-[0.15em]">Sign Out</span>
       </button>
 
       <ConfirmationModal
