@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -8,6 +8,7 @@ import {
 import { Toaster } from "react-hot-toast";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import Navigation from "./components/Navigation";
+import Sidebar from "./components/Sidebar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import CommitteeLogin from "./pages/CommitteeLogin";
@@ -201,13 +202,41 @@ function AppRoutes() {
 
 
 
+function AppContent() {
+  const { isAuthenticated, user } = useAuth();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  return (
+    <div className="flex min-h-screen bg-surface">
+      {isAuthenticated && (
+        <Sidebar 
+          isOpen={isSidebarOpen} 
+          onClose={() => setIsSidebarOpen(false)} 
+          user={user}
+          isAuthenticated={isAuthenticated}
+        />
+      )}
+      
+      <div className={`flex-1 flex flex-col min-w-0 ${isAuthenticated ? "lg:pl-[280px]" : ""}`}>
+        {isAuthenticated && (
+          <Navigation onOpenSidebar={() => setIsSidebarOpen(true)} />
+        )}
+        
+        <main className="flex-1">
+          <AppRoutes />
+        </main>
+        
+        {!isAuthenticated && <Footer />}
+      </div>
+    </div>
+  );
+}
+
 function App() {
   return (
     <Router>
       <AuthProvider>
-        <Navigation />
-        <AppRoutes />
-        <Footer />
+        <AppContent />
         <Toaster position="top-right" />
       </AuthProvider>
     </Router>
