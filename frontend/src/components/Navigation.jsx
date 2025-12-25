@@ -2,7 +2,15 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import api from "../utils/api";
-import debounce from "lodash/debounce";
+
+// Custom debounce helper to avoid external dependencies
+const debounce = (func, delay) => {
+  let timer;
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => func(...args), delay);
+  };
+};
 
 const Navigation = ({ onOpenSidebar }) => {
   const { user, isAuthenticated } = useAuth();
