@@ -21,6 +21,7 @@ const { upload } = require("../utils/fileUpload");
 
 // Public routes (accessible to VERIFIED_USERS and FIELD_ADMINS)
 router.get("/", authenticateToken, requireVerified, getEvents);
+router.get("/past", authenticateToken, requireVerified, getPastEvents);
 router.get("/:id", authenticateToken, requireVerified, getEventById);
 router.get("/user/events", authenticateToken, requireVerified, getUserEvents);
 router.get(

@@ -113,6 +113,33 @@ const getEvents = async (req, res) => {
   }
 };
 
+// Get all past events (History)
+const getPastEvents = async (req, res) => {
+  try {
+    const query = `
+      SELECT 
+        e.*,
+        u.full_name as created_by_name,
+        COUNT(ea.id) as registered_count
+      FROM events e
+      LEFT JOIN users u ON e.created_by = u.id
+      LEFT JOIN event_attendance ea ON e.id = ea.event_id AND ea.attendance_status = 'REGISTERED'
+      WHERE e.event_date < CURRENT_DATE
+      GROUP BY e.id, u.full_name
+      ORDER BY e.event_date DESC, e.event_time DESC
+    `;
+
+    const result = await pool.query(query);
+    res.json({
+      success: true,
+      events: result.rows,
+    });
+  } catch (error) {
+    console.error("Error fetching past events:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 // Get a specific event by ID
 const getEventById = async (req, res) => {
   try {
@@ -461,6 +488,8 @@ module.exports = {
   registerForEvent,
   getEventAttendees,
   markAttendance,
+  markAttendance,
   getUserEvents,
   cancelRegistration,
+  getPastEvents,
 };

@@ -31,20 +31,24 @@ const Events = () => {
     eventName: "",
   });
 
+  const [activeTab, setActiveTab] = useState("upcoming"); // "upcoming" or "history"
+
   // Fetch events
   useEffect(() => {
     fetchEvents();
     if (user) {
       fetchUserEvents();
     }
-  }, [user]);
+  }, [user, activeTab]);
 
   const fetchEvents = async () => {
     try {
-      const response = await api.get("/events");
+      setLoading(true);
+      const endpoint = activeTab === "upcoming" ? "/events" : "/events/past";
+      const response = await api.get(endpoint);
       setEvents(response.data.events);
     } catch (error) {
-      toast.error("Failed to fetch events");
+      toast.error(`Failed to fetch ${activeTab} events`);
     } finally {
       setLoading(false);
     }
@@ -187,19 +191,47 @@ const Events = () => {
   return (
     <div className="min-h-screen bg-surface">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="flex justify-between items-end mb-8 border-b border-gray-200 pb-4">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 border-b border-gray-200 pb-4 gap-4">
           <div>
             <h1 className="text-4xl font-headings font-bold text-primary mb-2">Events</h1>
-            <p className="text-text-muted">Upcoming alumni gatherings and networking opportunities.</p>
+            <p className="text-text-muted">
+              {activeTab === "upcoming" 
+                ? "Upcoming alumni gatherings and networking opportunities." 
+                : "A history of our past gatherings and shared memories."}
+            </p>
           </div>
-          {isSuperAdmin && (
-            <button
-              onClick={() => setShowCreateForm(!showCreateForm)}
-              className="bg-primary hover:bg-primary-light text-white px-6 py-2 rounded-md font-semibold transition-colors duration-200 shadow-sm"
-            >
-              {showCreateForm ? "Cancel" : "Create Event"}
-            </button>
-          )}
+          <div className="flex items-center gap-4">
+            <div className="bg-gray-100 p-1 rounded-xl flex">
+              <button
+                onClick={() => setActiveTab("upcoming")}
+                className={`px-4 py-2 rounded-lg text-sm font-bold transition-all duration-300 ${
+                  activeTab === "upcoming" 
+                    ? "bg-white text-primary shadow-sm" 
+                    : "text-gray-500 hover:text-primary"
+                }`}
+              >
+                Upcoming
+              </button>
+              <button
+                onClick={() => setActiveTab("history")}
+                className={`px-4 py-2 rounded-lg text-sm font-bold transition-all duration-300 ${
+                  activeTab === "history" 
+                    ? "bg-white text-primary shadow-sm" 
+                    : "text-gray-500 hover:text-primary"
+                }`}
+              >
+                History
+              </button>
+            </div>
+            {isSuperAdmin && activeTab === "upcoming" && (
+              <button
+                onClick={() => setShowCreateForm(!showCreateForm)}
+                className="bg-primary hover:bg-primary-light text-white px-6 py-2 rounded-xl font-semibold transition-all duration-200 shadow-sm whitespace-nowrap"
+              >
+                {showCreateForm ? "Cancel" : "Create Event"}
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Create Event Form */}
@@ -310,15 +342,17 @@ const Events = () => {
         {/* Upcoming Events */}
         <div className="mb-8">
           {events.length === 0 ? (
-            <div className="bg-white shadow-sm border border-gray-200 rounded-lg p-12 text-center">
+            <div className="bg-white shadow-sm border border-gray-200 rounded-lg p-12 text-center mt-8">
               <svg className="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
-              <p className="text-xl text-gray-500 font-headings">No upcoming events scheduled.</p>
+              <p className="text-xl text-gray-500 font-headings">
+                {activeTab === "upcoming" ? "No upcoming events scheduled." : "No past events recorded."}
+              </p>
               <p className="text-gray-400 mt-2">Check back later for updates.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
               {events.map((event) => {
                 const userEvent = userEvents.find((ue) => ue.id === event.id);
                 const isRegistered =
@@ -343,8 +377,12 @@ const Events = () => {
                         <h3 className="text-xl font-bold text-primary font-headings leading-tight">
                           {event.title}
                         </h3>
-                         <span className="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded font-bold uppercase tracking-wide">
-                            Upcoming
+                         <span className={`text-[10px] px-2 py-1 rounded font-bold uppercase tracking-wide
+                           ${activeTab === "upcoming" 
+                             ? "bg-blue-50 text-blue-700" 
+                             : "bg-gray-100 text-gray-600"
+                           }`}>
+                            {activeTab === "upcoming" ? "Upcoming" : "Completed"}
                          </span>
                       </div>
                       
@@ -433,7 +471,7 @@ const Events = () => {
                         </div>
                       </div>
 
-                      {user && !isSuperAdmin && (
+                      {user && !isSuperAdmin && activeTab === "upcoming" && (
                         <div className="mt-auto">
                           {isRegistered ? (
                             <div className="flex items-center justify-between bg-green-50 p-3 rounded border border-green-100 mb-4">
@@ -476,9 +514,9 @@ const Events = () => {
                             <>
                               <button
                                 onClick={() => fetchAttendees(event.id, event.title)}
-                                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md font-bold text-sm uppercase tracking-wider mb-2 transition-colors"
+                                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md font-bold text-sm uppercase tracking-wider transition-colors"
                               >
-                                View Attendees
+                                {activeTab === "upcoming" ? "View Attendees" : "View Final Roll"}
                               </button>
                               <div className="flex space-x-2">
                                 <button
