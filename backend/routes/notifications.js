@@ -6,6 +6,7 @@ const {
   markAsRead,
   markAllAsRead,
   deleteNotification,
+  deleteAllNotifications,
 } = require("../controllers/notifications");
 
 router.get("/", authenticateToken, getNotifications);
