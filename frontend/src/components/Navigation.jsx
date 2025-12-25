@@ -2,24 +2,23 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import LogoutButton from "./LogoutButton";
+import Sidebar from "./Sidebar";
 import api from "../utils/api";
 
 const Navigation = () => {
   const { user, isAuthenticated } = useAuth();
   const location = useLocation();
-  const [pendingCount, setPendingCount] = useState(0);
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [hasUnreadApproval, setHasUnreadApproval] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const notificationRef = useRef(null);
-  const menuRef = useRef(null);
 
   const isActive = (path) => location.pathname === path;
 
-  // Close mobile menu on location change
+  // Close mobile sidebar on location change
   useEffect(() => {
-    setIsMenuOpen(false);
+    setIsSidebarOpen(false);
   }, [location.pathname]);
 
   // Close dropdown when clicking outside
@@ -30,12 +29,6 @@ const Navigation = () => {
         !notificationRef.current.contains(event.target)
       ) {
         setShowNotifications(false);
-      }
-      if (
-        menuRef.current &&
-        !menuRef.current.contains(event.target)
-      ) {
-        setIsMenuOpen(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -62,19 +55,14 @@ const Navigation = () => {
     }
   }, [isAuthenticated]);
 
-  // Early return MUST be after all hooks
   if (!isAuthenticated) {
     return null;
   }
 
-  const NavLink = ({ to, children, mobile = false }) => (
+  const NavLink = ({ to, children }) => (
     <Link
       to={to}
-      className={`${
-        mobile
-          ? "block px-3 py-2 rounded-md text-base font-medium"
-          : "px-4 py-2 rounded-md text-sm font-medium"
-      } transition-colors duration-200 ${
+      className={`px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
         isActive(to)
           ? "bg-secondary text-white shadow-sm"
           : "text-gray-300 hover:text-white hover:bg-white/10"
@@ -130,13 +118,31 @@ const Navigation = () => {
                   />
                 </svg>
               </div>
-              <span className="text-xl font-headings font-bold text-white tracking-wide group-hover:text-secondary transition-colors duration-200">
+              <span className="hidden sm:inline-block text-xl font-headings font-bold text-white tracking-wide group-hover:text-secondary transition-colors duration-200">
                 Alumni Hub
               </span>
             </Link>
           </div>
 
-          {/* Navigation Links */}
+          {/* Search Field (Top Bar) */}
+          <div className="flex-1 max-w-xs md:max-w-sm mx-4 hidden sm:block">
+            <div className="relative group">
+              <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <svg className="h-4 w-4 text-gray-400 group-focus-within:text-secondary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </span>
+              <input
+                type="text"
+                placeholder="Search alumni..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 bg-primary-light/50 border border-white/10 rounded-full text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all"
+              />
+            </div>
+          </div>
+
+          {/* Navigation Links (Desktop) */}
           <div className="hidden md:flex items-center space-x-2">
             <NavLink to="/">Home</NavLink>
 
@@ -175,26 +181,14 @@ const Navigation = () => {
           </div>
 
           {/* Right side actions */}
-          <div className="flex items-center space-x-4 md:space-x-6">
-            {/* Mobile menu button */}
-            <div className="flex md:hidden" ref={menuRef}>
-              <button
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
-                aria-expanded="false"
-              >
-                <span className="sr-only">Open main menu</span>
-                {!isMenuOpen ? (
-                  <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-                  </svg>
-                ) : (
-                  <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                )}
-              </button>
-            </div>
+          <div className="flex items-center space-x-2 md:space-x-4">
+            {/* Mobile Search Button (Placeholder) */}
+            <button className="sm:hidden p-2 text-gray-400 hover:text-white transition-colors">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </button>
+
             {/* Notification Bell */}
             {(user?.role === "SUPER_ADMIN" ||
               user?.role === "FIELD_ADMIN" ||
@@ -288,106 +282,51 @@ const Navigation = () => {
             {user?.role === "UNVERIFIED" && (
               <Link
                 to="/submit"
-                className="bg-secondary hover:bg-secondary-dark text-white px-6 py-2 rounded-md text-sm font-medium transition-colors duration-200 shadow-sm"
+                className="hidden md:block bg-secondary hover:bg-secondary-dark text-white px-6 py-2 rounded-md text-sm font-medium transition-colors duration-200 shadow-sm"
               >
                 Submit Data
               </Link>
             )}
 
-            {/* User menu */}
-            <div className="flex items-center space-x-4">
-              <div className="text-right hidden sm:block border-r border-gray-600 pr-4">
-                <div className="text-sm font-bold text-white font-headings">
+            {/* User Info & Sidebar Toggle */}
+            <div className="flex items-center space-x-2 md:space-x-4 ml-2">
+              <div className="text-right hidden lg:block border-r border-gray-600 pr-4">
+                <div className="text-sm font-bold text-white font-headings truncate max-w-[150px]">
                   {user?.full_name || user?.email}
                 </div>
-                <div className="text-xs text-gray-300 capitalize">
+                <div className="text-[10px] text-gray-400 uppercase tracking-tighter">
                   {user?.role === "FIELD_ADMIN" && user?.assigned_field
                     ? `${user.assigned_field} Admin`
                     : user?.role?.toLowerCase().replace("_", " ")}
                 </div>
               </div>
-              <LogoutButton />
+              
+              <div className="hidden md:block">
+                <LogoutButton />
+              </div>
+
+              {/* Sidebar toggle button (Mobile/Tablet Only) */}
+              <button
+                onClick={() => setIsSidebarOpen(true)}
+                className="md:hidden p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-md transition-colors"
+                aria-label="Open menu"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Mobile Menu */}
-      {isMenuOpen && (
-        <div className="md:hidden bg-primary border-t border-primary-dark">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <NavLink to="/" mobile>Home</NavLink>
-
-            {(user?.role === "VERIFIED_USER" ||
-              user?.role === "SUPER_ADMIN" ||
-              user?.role === "FIELD_ADMIN") && (
-              <NavLink to="/events" mobile>Events</NavLink>
-            )}
-
-            {user?.role === "VERIFIED_USER" && (
-              <>
-                <NavLink to="/my-profile" mobile>My Profile</NavLink>
-                <NavLink to="/my-submissions" mobile>My Submissions</NavLink>
-              </>
-            )}
-
-            {(user?.role === "SUPER_ADMIN" || user?.role === "FIELD_ADMIN") && (
-              <>
-                <NavLink to="/directory" mobile>Directory</NavLink>
-
-                {user?.role === "FIELD_ADMIN" && (
-                  <NavLink to="/my-profile" mobile>My Profile</NavLink>
-                )}
-
-                <NavLink to="/admin" mobile>
-                  {user?.role === "FIELD_ADMIN" ? "Manage" : "Dashboard"}
-                </NavLink>
-
-                <NavLink to="/reports" mobile>Reports</NavLink>
-
-                {user?.role === "SUPER_ADMIN" && (
-                  <NavLink to="/admin/field-admins" mobile>Admins</NavLink>
-                )}
-              </>
-            )}
-          </div>
-          
-          <div className="pt-4 pb-3 border-t border-primary-dark px-4">
-            <div className="flex items-center mb-4">
-              <div className="flex-shrink-0">
-                <div className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-white font-bold">
-                  {(user?.full_name || user?.email)?.[0].toUpperCase()}
-                </div>
-              </div>
-              <div className="ml-3">
-                <div className="text-base font-medium leading-none text-white">
-                  {user?.full_name || user?.email}
-                </div>
-                <div className="text-sm font-medium leading-none text-gray-400 mt-1">
-                  {user?.role === "FIELD_ADMIN" && user?.assigned_field
-                    ? `${user.assigned_field} Admin`
-                    : user?.role?.toLowerCase().replace("_", " ")}
-                </div>
-              </div>
-            </div>
-            
-            {user?.role === "UNVERIFIED" && (
-              <div className="mb-4">
-                <Link
-                  to="/submit"
-                  className="block w-full text-center bg-secondary hover:bg-secondary-dark text-white px-4 py-2 rounded-md text-base font-medium transition-colors duration-200"
-                >
-                  Submit Data
-                </Link>
-              </div>
-            )}
-            
-            <div className="flex justify-center">
-              <LogoutButton />
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Sidebar Component */}
+      <Sidebar 
+        isOpen={isSidebarOpen} 
+        onClose={() => setIsSidebarOpen(false)} 
+        user={user}
+        isAuthenticated={isAuthenticated}
+      />
     </nav>
   );
 };
