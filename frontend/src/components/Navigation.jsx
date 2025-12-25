@@ -10,8 +10,10 @@ const Navigation = () => {
   const [pendingCount, setPendingCount] = useState(0);
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [hasUnreadApproval, setHasUnreadApproval] = useState(false);
   const notificationRef = useRef(null);
+  const menuRef = useRef(null);
 
   const isActive = (path) => location.pathname === path;
 
@@ -23,6 +25,12 @@ const Navigation = () => {
         !notificationRef.current.contains(event.target)
       ) {
         setShowNotifications(false);
+      }
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target)
+      ) {
+        setIsMenuOpen(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -54,10 +62,15 @@ const Navigation = () => {
     return null;
   }
 
-  const NavLink = ({ to, children }) => (
+  const NavLink = ({ to, children, mobile = false }) => (
     <Link
       to={to}
-      className={`px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
+      onClick={() => setIsMenuOpen(false)}
+      className={`${
+        mobile
+          ? "block px-3 py-2 rounded-md text-base font-medium"
+          : "px-4 py-2 rounded-md text-sm font-medium"
+      } transition-colors duration-200 ${
         isActive(to)
           ? "bg-secondary text-white shadow-sm"
           : "text-gray-300 hover:text-white hover:bg-white/10"
@@ -158,7 +171,26 @@ const Navigation = () => {
           </div>
 
           {/* Right side actions */}
-          <div className="flex items-center space-x-6">
+          <div className="flex items-center space-x-4 md:space-x-6">
+            {/* Mobile menu button */}
+            <div className="flex md:hidden" ref={menuRef}>
+              <button
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                aria-expanded="false"
+              >
+                <span className="sr-only">Open main menu</span>
+                {!isMenuOpen ? (
+                  <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                  </svg>
+                ) : (
+                  <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                )}
+              </button>
+            </div>
             {/* Notification Bell */}
             {(user?.role === "SUPER_ADMIN" ||
               user?.role === "FIELD_ADMIN" ||
@@ -275,6 +307,84 @@ const Navigation = () => {
           </div>
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      {isMenuOpen && (
+        <div className="md:hidden bg-primary border-t border-primary-dark">
+          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            <NavLink to="/" mobile>Home</NavLink>
+
+            {(user?.role === "VERIFIED_USER" ||
+              user?.role === "SUPER_ADMIN" ||
+              user?.role === "FIELD_ADMIN") && (
+              <NavLink to="/events" mobile>Events</NavLink>
+            )}
+
+            {user?.role === "VERIFIED_USER" && (
+              <>
+                <NavLink to="/my-profile" mobile>My Profile</NavLink>
+                <NavLink to="/my-submissions" mobile>My Submissions</NavLink>
+              </>
+            )}
+
+            {(user?.role === "SUPER_ADMIN" || user?.role === "FIELD_ADMIN") && (
+              <>
+                <NavLink to="/directory" mobile>Directory</NavLink>
+
+                {user?.role === "FIELD_ADMIN" && (
+                  <NavLink to="/my-profile" mobile>My Profile</NavLink>
+                )}
+
+                <NavLink to="/admin" mobile>
+                  {user?.role === "FIELD_ADMIN" ? "Manage" : "Dashboard"}
+                </NavLink>
+
+                <NavLink to="/reports" mobile>Reports</NavLink>
+
+                {user?.role === "SUPER_ADMIN" && (
+                  <NavLink to="/admin/field-admins" mobile>Admins</NavLink>
+                )}
+              </>
+            )}
+          </div>
+          
+          <div className="pt-4 pb-3 border-t border-primary-dark px-4">
+            <div className="flex items-center mb-4">
+              <div className="flex-shrink-0">
+                <div className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-white font-bold">
+                  {(user?.full_name || user?.email)?.[0].toUpperCase()}
+                </div>
+              </div>
+              <div className="ml-3">
+                <div className="text-base font-medium leading-none text-white">
+                  {user?.full_name || user?.email}
+                </div>
+                <div className="text-sm font-medium leading-none text-gray-400 mt-1">
+                  {user?.role === "FIELD_ADMIN" && user?.assigned_field
+                    ? `${user.assigned_field} Admin`
+                    : user?.role?.toLowerCase().replace("_", " ")}
+                </div>
+              </div>
+            </div>
+            
+            {user?.role === "UNVERIFIED" && (
+              <div className="mb-4">
+                <Link
+                  to="/submit"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="block w-full text-center bg-secondary hover:bg-secondary-dark text-white px-4 py-2 rounded-md text-base font-medium transition-colors duration-200"
+                >
+                  Submit Data
+                </Link>
+              </div>
+            )}
+            
+            <div className="flex justify-center">
+              <LogoutButton />
+            </div>
+          </div>
+        </div>
+      )}
     </nav>
   );
 };

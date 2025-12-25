@@ -6,10 +6,11 @@ Alumni Hub is a centralized platform designed to connect alumni, manage their da
 ---
 
 ## 1. Access & Authentication
-*   **Login Method**: All users (Members, Field Admins, and Super Admins) log in using their **email account via Google OAuth2**.
-*   **Account Creation**: There is no separate "sign up" form. New users simply log in with Google.
-    *   If the email is new to the system, a basic account is created with the role **UNVERIFIED**.
-    *   If the email matches an existing verified record, they are logged in with their assigned role.
+*   **Super Admin Login**: Logs in using an **email and password** (hardcoded/assigned in the database).
+*   **General User Login (Members & Field Admins)**: Log in using their **email account via Google OAuth2**.
+*   **Account Creation**: 
+    *   New users log in with Google. If the email is new, an account is created with the role **UNVERIFIED**.
+    *   If the email matches an existing record, they are logged in with their assigned role (e.g., Verified Member or Field Admin).
 
 ---
 
@@ -33,8 +34,8 @@ Alumni Hub is a centralized platform designed to connect alumni, manage their da
 *   **Authority**: Standard user access.
 *   **Capabilities**:
     *   **Profile**: Can view and edit their own profile details.
-    *   **Directory**: Can browse the alumni directory to find batchmates.
     *   **Events**: Can browse upcoming events and register for them.
+    *   **Note**: Verified members **cannot** view the directory of other members for privacy reasons.
 
 ### D. Unverified / New User
 *   **Authority**: Restricted access.
@@ -65,7 +66,7 @@ Alumni Hub is a centralized platform designed to connect alumni, manage their da
 ### Step 3: Verified User Access
 1.  Once approved, the next time the user logs in:
     *   They see a **Notification** confirming their account verification.
-    *   They gain access to the **Events**, **Directory**, and **Profile** sections.
+    *   They gain access to the **Events** and **Profile** sections.
 
 ---
 
@@ -92,9 +93,9 @@ Alumni Hub is a centralized platform designed to connect alumni, manage their da
 *   **Export**: Download the filtered data as a formatted **PDF** or **Excel** file.
 
 ### 4.4 Directory
-*   **Access**: Available to all Verified Members and Admins.
-*   **Function**: A searchable list of all verified alumni.
-*   **Privacy**: Shows professional details (Workplace, Position, LinkedIn) to facilitate networking.
+*   **Access**: Restricted to **Super Admins** and **Field Admins** only.
+*   **Function**: A searchable list of alumni. Admins can view full details to manage and verify membership.
+*   **Note**: Regular members do not have access to the directory.
 
 ---
 
@@ -104,7 +105,6 @@ Alumni Hub is a centralized platform designed to connect alumni, manage their da
 3.  **Field Admin reviews data** (Notified via Bell Icon).
 4.  **Admin approves user** -> User becomes **Verified Member**.
 5.  **Verified Member** is notified via Bell Icon and can now:
-    *   Search the Directory.
     *   Register for Events.
     *   Update their Profile.
-6.  **Super Admin** oversees the whole process and manages the Field Admin team.
+6.  **Super Admin** oversees the whole process and manages the Field Admin team and Directory.
