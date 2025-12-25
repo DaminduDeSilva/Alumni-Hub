@@ -17,6 +17,11 @@ const Navigation = () => {
 
   const isActive = (path) => location.pathname === path;
 
+  // Close mobile menu on location change
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [location.pathname]);
+
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -65,7 +70,6 @@ const Navigation = () => {
   const NavLink = ({ to, children, mobile = false }) => (
     <Link
       to={to}
-      onClick={() => setIsMenuOpen(false)}
       className={`${
         mobile
           ? "block px-3 py-2 rounded-md text-base font-medium"
@@ -371,7 +375,6 @@ const Navigation = () => {
               <div className="mb-4">
                 <Link
                   to="/submit"
-                  onClick={() => setIsMenuOpen(false)}
                   className="block w-full text-center bg-secondary hover:bg-secondary-dark text-white px-4 py-2 rounded-md text-base font-medium transition-colors duration-200"
                 >
                   Submit Data
