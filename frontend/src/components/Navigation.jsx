@@ -130,18 +130,19 @@ const Navigation = ({ onOpenSidebar }) => {
               </svg>
             </button>
             
-            <Link to="/" className="flex items-center space-x-3.5 group transition-all duration-300">
-              <div className="flex items-center space-x-3.5">
-                {/* Clean Emoji with Subtle Lift */}
+            <Link to="/" className="flex items-center space-x-4 group transition-all duration-300">
+              <div className="flex items-center space-x-4">
+                {/* Enhanced Emoji with Sharp Depth */}
                 <div className="relative">
-                  <span className="relative text-2xl filter drop-shadow-[0_0_8px_rgba(255,255,255,0.3)] transform group-hover:scale-110 group-hover:-rotate-3 transition-all duration-500 block">🎓</span>
+                  <span className="relative text-3xl filter drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)] transform group-hover:scale-110 group-hover:-rotate-6 transition-all duration-500 block">🎓</span>
                 </div>
                 
                 <div className="hidden sm:block">
-                  <h1 className="text-[19px] font-headings font-black tracking-tight leading-none text-white drop-shadow-md">
-                    ALUMNI HUB
+                  <h1 className="text-[22px] font-headings font-black tracking-tighter leading-none flex items-center">
+                    <span className="text-white drop-shadow-md">ALUMNI</span>
+                    <span className="text-secondary ml-1.5 drop-shadow-[0_0_10px_rgba(var(--secondary-rgb),0.3)]">HUB</span>
                   </h1>
-                  <p className="text-[9px] font-black text-secondary uppercase tracking-[0.45em] mt-1.5 opacity-90">
+                  <p className="text-[10px] font-black text-white/50 uppercase tracking-[0.5em] mt-2 block pl-0.5">
                     Platform
                   </p>
                 </div>
