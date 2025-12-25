@@ -6,8 +6,6 @@ const Footer = () => {
   const { isAuthenticated } = useAuth();
   const currentYear = new Date().getFullYear();
 
-  if (!isAuthenticated) return null;
-
   return (
     <footer className="bg-primary border-t border-primary-dark text-white pt-12 pb-8 mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
