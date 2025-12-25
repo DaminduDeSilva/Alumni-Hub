@@ -130,28 +130,20 @@ const Navigation = ({ onOpenSidebar }) => {
               </svg>
             </button>
             
-            <Link to="/" className="relative flex items-center space-x-3.5 group p-1.5 px-3 rounded-2xl transition-all duration-300">
-              {/* Subtle Glass Background for Logo */}
-              <div className="absolute inset-0 bg-white/[0.03] border border-white/5 rounded-2xl group-hover:bg-white/[0.06] group-hover:border-white/10 transition-all duration-500" />
-              
-              <div className="relative flex items-center space-x-3.5">
-                {/* Emoji with Glow */}
+            <Link to="/" className="flex items-center space-x-3.5 group transition-all duration-300">
+              <div className="flex items-center space-x-3.5">
+                {/* Clean Emoji with Subtle Lift */}
                 <div className="relative">
-                  <div className="absolute inset-0 bg-secondary/30 blur-xl rounded-full scale-150 animate-pulse" />
-                  <span className="relative text-2xl filter drop-shadow-[0_0_15px_rgba(255,255,255,0.4)] transform group-hover:scale-110 group-hover:-rotate-3 transition-all duration-500 block">🎓</span>
+                  <span className="relative text-2xl filter drop-shadow-[0_0_8px_rgba(255,255,255,0.3)] transform group-hover:scale-110 group-hover:-rotate-3 transition-all duration-500 block">🎓</span>
                 </div>
                 
-                <div className="hidden sm:block relative">
-                  <h1 className="text-[17px] font-headings font-black tracking-tight leading-none text-transparent bg-clip-text bg-gradient-to-br from-white via-white to-white/60 drop-shadow-sm">
+                <div className="hidden sm:block">
+                  <h1 className="text-[19px] font-headings font-black tracking-tight leading-none text-white drop-shadow-md">
                     ALUMNI HUB
                   </h1>
-                  <div className="flex items-center gap-1.5 mt-1">
-                    <div className="h-px flex-1 bg-gradient-to-r from-secondary/50 to-transparent" />
-                    <p className="text-[8px] font-black text-secondary uppercase tracking-[0.4em] drop-shadow-md">
-                      Platform
-                    </p>
-                    <div className="h-px flex-1 bg-gradient-to-l from-secondary/50 to-transparent" />
-                  </div>
+                  <p className="text-[9px] font-black text-secondary uppercase tracking-[0.45em] mt-1.5 opacity-90">
+                    Platform
+                  </p>
                 </div>
               </div>
             </Link>
