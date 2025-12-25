@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { createPortal } from "react-dom";
 
 const ConfirmationModal = ({
   isOpen,
@@ -17,7 +18,6 @@ const ConfirmationModal = ({
 
     if (isOpen) {
       document.addEventListener("keydown", handleEscape);
-      // Prevent body scroll when modal is open
       document.body.style.overflow = "hidden";
     }
 
@@ -29,63 +29,43 @@ const ConfirmationModal = ({
 
   if (!isOpen) return null;
 
-  return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
+  return createPortal(
+    <div className="fixed inset-0 z-[999] overflow-y-auto">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black bg-opacity-50 transition-opacity backdrop-blur-sm"
+        className="fixed inset-0 bg-black/60 transition-opacity backdrop-blur-md"
         onClick={onClose}
       ></div>
 
       {/* Modal Card */}
       <div className="flex min-h-screen items-center justify-center p-4">
-        <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:w-full sm:max-w-lg border border-gray-200">
-          <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-            <div className="sm:flex sm:items-start">
-              {/* Icon */}
+        <div className="relative transform overflow-hidden rounded-[32px] bg-white text-left shadow-2xl transition-all sm:w-full sm:max-w-lg border border-gray-100 animate-in fade-in zoom-in-95 duration-200">
+          <div className="bg-white px-8 pb-8 pt-10">
+            <div className="sm:flex sm:items-start text-center sm:text-left">
+              {/* Icon Container */}
               <div
-                className={`mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full sm:mx-0 sm:h-10 sm:w-10 ${
-                  isDangerous ? "bg-red-100" : "bg-blue-100"
+                className={`mx-auto flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-2xl sm:mx-0 ${
+                  isDangerous ? "bg-red-50 text-red-500" : "bg-primary/5 text-primary"
                 }`}
               >
                 {isDangerous ? (
-                  <svg
-                    className="h-6 w-6 text-red-600"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
-                    />
+                  <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
                   </svg>
                 ) : (
-                  <svg
-                    className="h-6 w-6 text-primary"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"
-                    />
+                  <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
                   </svg>
                 )}
               </div>
 
               {/* Content */}
-              <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                <h3 className="text-xl font-headings font-bold leading-6 text-gray-900">
+              <div className="mt-6 sm:ml-6 sm:mt-0">
+                <h3 className="text-2xl font-headings font-black leading-6 text-primary tracking-tight">
                   {title}
                 </h3>
-                <div className="mt-2">
-                  <p className="text-sm text-gray-500 font-body leading-relaxed">
+                <div className="mt-4">
+                  <p className="text-sm text-gray-400 font-bold leading-relaxed">
                     {message}
                   </p>
                 </div>
@@ -94,13 +74,13 @@ const ConfirmationModal = ({
           </div>
 
           {/* Buttons */}
-          <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+          <div className="bg-gray-50/50 px-8 py-6 sm:flex sm:flex-row-reverse gap-3">
             <button
               type="button"
-              className={`inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-bold shadow-sm sm:ml-3 sm:w-auto transition-colors duration-200 ${
+              className={`inline-flex w-full justify-center rounded-2xl px-8 py-4 text-xs font-black uppercase tracking-widest shadow-lg transition-all active:scale-95 sm:w-auto ${
                 isDangerous
-                  ? "bg-red-600 text-white hover:bg-red-700"
-                  : "bg-primary text-white hover:bg-primary-light"
+                  ? "bg-red-500 text-white hover:bg-red-600 shadow-red-500/20"
+                  : "bg-primary text-white hover:bg-primary-light shadow-primary/20"
               }`}
               onClick={onConfirm}
             >
@@ -108,7 +88,7 @@ const ConfirmationModal = ({
             </button>
             <button
               type="button"
-              className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto transition-colors duration-200"
+              className="mt-3 inline-flex w-full justify-center rounded-2xl bg-white px-8 py-4 text-xs font-black uppercase tracking-widest text-gray-400 shadow-sm ring-1 ring-inset ring-gray-100 hover:bg-gray-50 transition-all active:scale-95 sm:mt-0 sm:w-auto"
               onClick={onClose}
             >
               {cancelText}
@@ -116,7 +96,8 @@ const ConfirmationModal = ({
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 
