@@ -230,7 +230,7 @@ function AppContent() {
         </main>
       </div>
       
-      {!isAuthenticated && <Footer />}
+      <Footer />
     </div>
   );
 }

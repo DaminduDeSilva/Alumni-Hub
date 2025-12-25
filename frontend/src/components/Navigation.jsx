@@ -105,10 +105,10 @@ const Navigation = ({ onOpenSidebar }) => {
 
   if (!isAuthenticated) return null;
 
-  const handleMarkAllRead = async () => {
+  const handleClearNotifications = async () => {
     try {
-      await api.put("/notifications/mark-all-read");
-      setNotifications(notifications.map(n => ({ ...n, is_read: true })));
+      await api.delete("/notifications");
+      setNotifications([]);
     } catch (err) { console.error(err); }
   };
 
@@ -118,42 +118,44 @@ const Navigation = ({ onOpenSidebar }) => {
     <header className="h-20 bg-primary border-b border-white/5 sticky top-0 z-[100] px-6">
       <div className="h-full flex items-center justify-between gap-8">
         
-        {/* Left: Branding & Mobile Toggle */}
-        <div className="flex items-center gap-6">
-          <button
-            onClick={onOpenSidebar}
-            className="lg:hidden p-2 text-white/60 hover:text-white hover:bg-white/5 rounded-xl transition-all"
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-          
-          <Link to="/" className="flex items-center space-x-3">
-            <span className="text-2xl filter drop-shadow-lg">🎓</span>
-            <div className="hidden sm:block">
-              <h1 className="text-lg font-headings font-black text-white leading-none tracking-tight">ALUMNI HUB</h1>
-              <p className="text-[9px] font-black text-secondary uppercase tracking-[0.3em]">Platform</p>
-            </div>
-          </Link>
+        {/* Left: Branding & Mobile Toggle (Aligned with Sidebar Width) */}
+        <div className="flex items-center lg:w-[280px] lg:-ml-6 lg:justify-center">
+          <div className="flex items-center gap-6">
+            <button
+              onClick={onOpenSidebar}
+              className="lg:hidden p-2 text-white/60 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+            
+            <Link to="/" className="flex items-center space-x-3 group">
+              <span className="text-2xl filter drop-shadow-2xl transform group-hover:scale-110 transition-transform duration-300">🎓</span>
+              <div className="hidden sm:block">
+                <h1 className="text-lg font-headings font-black text-white leading-none tracking-tight">ALUMNI HUB</h1>
+                <p className="text-[9px] font-black text-secondary uppercase tracking-[0.3em] opacity-80">Platform</p>
+              </div>
+            </Link>
+          </div>
         </div>
 
-        {/* Center: Search Area */}
+        {/* Center: Search Area (Increased Visibility) */}
         <div className="flex-1 max-w-xl relative" ref={searchRef}>
           <div className="relative group">
             <span className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <svg className={`h-4 w-4 transition-colors duration-300 ${isSearching ? "text-secondary animate-pulse" : "text-white/30 group-focus-within:text-white"}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className={`h-4 w-4 transition-colors duration-300 ${isSearching ? "text-secondary animate-pulse" : "text-white/40 group-focus-within:text-white"}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
             </span>
             <input
                 ref={inputRef}
                 type="text"
-                placeholder="Search platform..."
+                placeholder="Search anything..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => searchQuery && setShowResults(true)}
-                className="w-full pl-11 pr-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs font-bold text-white placeholder-white/30 focus:bg-white/10 focus:border-white/20 transition-all outline-none"
+                className="w-full pl-11 pr-4 py-2.5 bg-white/10 border border-white/20 rounded-xl text-xs font-bold text-white placeholder-white/40 focus:bg-white/15 focus:border-white/40 focus:ring-4 focus:ring-white/5 transition-all outline-none"
             />
             <div className="absolute right-3 inset-y-0 flex items-center pointer-events-none">
                 <kbd className="hidden sm:inline-flex items-center px-2 py-1 text-[9px] font-bold text-white/20 bg-black/20 rounded-md"> / </kbd>
@@ -212,7 +214,7 @@ const Navigation = ({ onOpenSidebar }) => {
               <div className="absolute right-0 mt-4 w-80 bg-white rounded-2xl shadow-2xl py-4 z-50 animate-in fade-in zoom-in-95">
                 <div className="px-6 pb-2 border-b border-gray-50 flex justify-between items-center mb-2">
                     <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Updates</h3>
-                    <button onClick={handleMarkAllRead} className="text-[10px] font-black text-secondary hover:underline">Clear</button>
+                    <button onClick={handleClearNotifications} className="text-[10px] font-black text-secondary hover:underline">Clear</button>
                 </div>
                 <div className="max-h-[250px] overflow-y-auto px-2 scrollbar-hide">
                     {notifications.length > 0 ? (

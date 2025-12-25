@@ -79,12 +79,6 @@ const Sidebar = ({ isOpen, onClose, user, isAuthenticated }) => {
           )}
         </div>
 
-        {/* Footer info */}
-        <div className="p-8 text-center">
-            <p className="text-[10px] font-bold text-slate-300 uppercase tracking-widest leading-relaxed">
-                v2.1.0 • ALUMNI HUB<br/>Built with Passion
-            </p>
-        </div>
       </aside>
     </>
   );
