@@ -16,6 +16,7 @@ const {
   markAttendance,
   getUserEvents,
   cancelRegistration,
+  getPastEvents,
 } = require("../controllers/events");
 const { upload } = require("../utils/fileUpload");
 

@@ -488,7 +488,6 @@ module.exports = {
   registerForEvent,
   getEventAttendees,
   markAttendance,
-  markAttendance,
   getUserEvents,
   cancelRegistration,
   getPastEvents,
